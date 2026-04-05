@@ -2,6 +2,7 @@ package com.example.placement.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,14 @@ public class StudentProfile {
     private String userName;
     private String photoUrl;
     private String bio;
+
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+    private String pinCode;
+
+    private LocalDate dob;
 
     @Enumerated(EnumType.STRING)
     private BranchType branch;
