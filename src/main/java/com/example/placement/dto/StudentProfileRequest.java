@@ -1,7 +1,5 @@
 package com.example.placement.dto;
 
-import com.example.placement.entity.BranchType;
-
 import java.util.Set;
 
 public class StudentProfileRequest {
@@ -9,7 +7,6 @@ public class StudentProfileRequest {
     private String rollNo;
     private String photoUrl;
     private String bio;
-    private BranchType branch;
     private Set<String> skills;
 
     public Long getUserId() {
@@ -46,16 +43,6 @@ public class StudentProfileRequest {
     public void setBio(String bio) {
         this.bio = bio;
     }
-
-    // Getter and Setter for branch
-    public BranchType getBranch() {
-        return branch;
-    }
-
-    public void setBranch(BranchType branch) {
-        this.branch = branch;
-    }
-
 
     // Getter and Setter for skills
     public Set<String> getSkills() {

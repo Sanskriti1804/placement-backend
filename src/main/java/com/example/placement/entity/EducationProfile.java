@@ -1,8 +1,11 @@
 package com.example.placement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class EducationProfile {
@@ -12,6 +15,7 @@ public class EducationProfile {
 
     @OneToOne
     @JoinColumn(name = "student_id", unique = true)
+    @JsonIgnore
     private StudentProfile student;
 
     private String university;
@@ -34,21 +38,20 @@ public class EducationProfile {
     @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal currentCgpa;
 
-
-    private String backlogSubject;
-    private Integer backlogSemester;
-
     private Integer gapYears;
     private String gapReason;
 
+    @OneToMany(mappedBy = "educationProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Backlog> backlogs = new ArrayList<>();
 
-    //getters and setters
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
-    public Long getId(){
+
+    public Long getId() {
         return id;
     }
+
     public StudentProfile getStudent() {
         return student;
     }
@@ -121,22 +124,6 @@ public class EducationProfile {
         this.currentCgpa = currentCgpa;
     }
 
-    public String getBacklogSubject() {
-        return backlogSubject;
-    }
-
-    public void setBacklogSubject(String backlogSubject) {
-        this.backlogSubject = backlogSubject;
-    }
-
-    public Integer getBacklogSemester() {
-        return backlogSemester;
-    }
-
-    public void setBacklogSemester(Integer backlogSemester) {
-        this.backlogSemester = backlogSemester;
-    }
-
     public Integer getGapYears() {
         return gapYears;
     }
@@ -151,5 +138,13 @@ public class EducationProfile {
 
     public void setGapReason(String gapReason) {
         this.gapReason = gapReason;
+    }
+
+    public List<Backlog> getBacklogs() {
+        return backlogs;
+    }
+
+    public void setBacklogs(List<Backlog> backlogs) {
+        this.backlogs = backlogs;
     }
 }

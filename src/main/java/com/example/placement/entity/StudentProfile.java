@@ -32,9 +32,6 @@ public class StudentProfile {
 
     private LocalDate dob;
 
-    @Enumerated(EnumType.STRING)
-    private BranchType branch;
-
     @ManyToMany
     @JoinTable(
             name = "student_skills",
