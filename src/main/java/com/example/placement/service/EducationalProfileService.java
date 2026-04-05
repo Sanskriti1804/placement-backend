@@ -28,13 +28,17 @@ public class EducationalProfileService {
     }
 
     public EducationProfile createOrUpdateEducation(EducationProfile educationProfile, Long studentId) {
+        //fetch student or throws error
         StudentProfile student = studentRepo.findById(studentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
 
+        //check if profile already exists
         EducationProfile existing = educationRepo.findByStudent_Id(studentId).orElse(null);
 
+        //if no existing profile
         if (existing == null) {
             educationProfile.setStudent(student);
+            //id - null - so JPA performs insert and not Update
             educationProfile.setId(null);
             //link backlogs to this new profile
             if (educationProfile.getBacklogs() != null) {
@@ -42,6 +46,7 @@ public class EducationalProfileService {
                     b.setEducationProfile(educationProfile);
                 }
             }
+            //save education profile
             return educationRepo.save(educationProfile);
         }
 
@@ -56,47 +61,30 @@ public class EducationalProfileService {
         existing.setGapYears(educationProfile.getGapYears());
         existing.setGapReason(educationProfile.getGapReason());
 
-        mergeBacklogs(existing, educationProfile.getBacklogs());
+        // Remove old backlogs → triggers DELETE (orphanRemoval = true)
+        existing.getBacklogs().clear();
+
+        // Add new backlogs from request
+        if (educationProfile.getBacklogs() != null) {
+            for (Backlog b : educationProfile.getBacklogs()) {
+                b.setId(null); // force insert (avoid accidental update)
+                b.setEducationProfile(existing);
+                existing.getBacklogs().add(b);
+            }
+        }
+
+        // Save everything (cascade handles backlogs)
         return educationRepo.save(existing);
     }
 
     public EducationProfile getEducationProfile(Long studentId) {
         EducationProfile profile =  educationRepo.findByStudent_Id(studentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "education profile no found"));
+        //manually fetch backlogs and attach - avoids lazy loading issues
         profile.setBacklogs(backLogRepo.findByEducationProfile_Id(profile.getId()));
         return profile;
     }
 
-    private void mergeBacklogs(EducationProfile existingProfile, List<Backlog> newBacklogs) {
-
-        if (newBacklogs == null) {
-            return;
-        }
-        //map existing backlogs by id
-        Map<Long, Backlog> existingMap = new HashMap<>();
-        for (Backlog b : existingProfile.getBacklogs()){
-            if (b.getId() != null){
-                existingMap.put(b.getId(), b);
-            }
-        }
-        //save or update new backlogs
-        for (Backlog b : newBacklogs) {
-            b.setEducationProfile(existingProfile);
-
-            if (b.getId() != null && existingMap.containsKey(b.getId())){
-                //update existing backlog
-                Backlog existing = existingMap.get(b.getId());
-                existing.setSubject(b.getSubject());
-                existing.setSemester(b.getSemester());
-                backLogRepo.save(existing);
-            }
-            else {
-                backLogRepo.save(b);
-                existingProfile.getBacklogs().add(b);
-
-            }
-            }
-    }
 }
 
 
