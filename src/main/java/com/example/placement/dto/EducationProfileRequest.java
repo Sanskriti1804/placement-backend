@@ -5,6 +5,7 @@ import com.example.placement.entity.CourseType;
 import com.example.placement.entity.DomainType;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class EducationProfileRequest {
     private Long studentId;
@@ -16,8 +17,7 @@ public class EducationProfileRequest {
     private BigDecimal tenthPercentage;
     private BigDecimal twelfthPercentage;
     private BigDecimal currentCgpa;
-    private String backlogSubject;
-    private Integer backlogSemester;
+    private List<BackLogRequest> backlogs;
     private Integer gapYears;
     private String gapReason;
 
@@ -48,11 +48,8 @@ public class EducationProfileRequest {
     public BigDecimal getCurrentCgpa() { return currentCgpa; }
     public void setCurrentCgpa(BigDecimal currentCgpa) { this.currentCgpa = currentCgpa; }
 
-    public String getBacklogSubject() { return backlogSubject; }
-    public void setBacklogSubject(String backlogSubject) { this.backlogSubject = backlogSubject; }
-
-    public Integer getBacklogSemester() { return backlogSemester; }
-    public void setBacklogSemester(Integer backlogSemester) { this.backlogSemester = backlogSemester; }
+    public List<BackLogRequest> getBacklogs() { return backlogs; }
+    public void setBacklogs(List<BackLogRequest> backlogs) { this.backlogs = backlogs; }
 
     public Integer getGapYears() { return gapYears; }
     public void setGapYears(Integer gapYears) { this.gapYears = gapYears; }

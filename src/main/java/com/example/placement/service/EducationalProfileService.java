@@ -2,6 +2,7 @@ package com.example.placement.service;
 
 import com.example.placement.entity.EducationProfile;
 import com.example.placement.entity.StudentProfile;
+import com.example.placement.repository.BackLogRepo;
 import com.example.placement.repository.EducationalProfileRepo;
 import com.example.placement.repository.StudentProfileRepo;
 import org.springframework.http.HttpStatus;
@@ -13,11 +14,13 @@ public class EducationalProfileService {
     //repo to access educationalProfile data in db
     private final EducationalProfileRepo educationRepo;
     private final StudentProfileRepo studentRepo;
+    private final BackLogRepo backLogRepo;
 
     //constructor based di
-    public EducationalProfileService(EducationalProfileRepo educationRepo, StudentProfileRepo studentRepo) {
+    public EducationalProfileService(EducationalProfileRepo educationRepo, StudentProfileRepo studentRepo, BackLogRepo backLogRepo) {
         this.educationRepo = educationRepo;
         this.studentRepo = studentRepo;
+        this.backLogRepo = backLogRepo;
     }
 
     //create or update educationalProfile for a specific student
