@@ -1,6 +1,10 @@
 package com.example.placement.service;
 
+import com.example.placement.config.EducationMapping;
 import com.example.placement.entity.Backlog;
+import com.example.placement.entity.BranchType;
+import com.example.placement.entity.CourseType;
+import com.example.placement.entity.DomainType;
 import com.example.placement.entity.EducationProfile;
 import com.example.placement.entity.StudentProfile;
 import com.example.placement.repository.BackLogRepo;
@@ -9,8 +13,10 @@ import com.example.placement.repository.StudentProfileRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,6 +89,44 @@ public class EducationalProfileService {
         //manually fetch backlogs and attach - avoids lazy loading issues
         profile.setBacklogs(backLogRepo.findByEducationProfile_Id(profile.getId()));
         return profile;
+    }
+
+    public List<BranchType> getAllBranches() {
+        return Arrays.asList(BranchType.values());
+    }
+
+    public List<CourseType> getCoursesForBranch(BranchType branch) {
+        return EducationMapping.getCoursesForBranch(branch);
+    }
+
+    public List<CourseType> getAllCourses() {
+        return Arrays.asList(CourseType.values());
+    }
+
+    public List<DomainType> getDomainsForCourse(CourseType course) {
+        return EducationMapping.getDomainForCourse(course);
+    }
+
+    public Map<String, Object> getAllMetadata() {
+        List<BranchType> branches = getAllBranches();
+        List<CourseType> courses = getAllCourses();
+
+        Map<BranchType, List<CourseType>> branchToCourses = new LinkedHashMap<>();
+        for (BranchType branch : branches) {
+            branchToCourses.put(branch, getCoursesForBranch(branch));
+        }
+
+        Map<CourseType, List<DomainType>> courseToDomains = new LinkedHashMap<>();
+        for (CourseType course : courses) {
+            courseToDomains.put(course, getDomainsForCourse(course));
+        }
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("branches", branches);
+        result.put("courses", courses);
+        result.put("branchToCourses", branchToCourses);
+        result.put("courseToDomains", courseToDomains);
+        return result;
     }
 
 }

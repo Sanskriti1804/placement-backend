@@ -16,6 +16,8 @@ public class EducationProfileController {
         this.service = service;
     }
 
+    // USER-SPECIFIC API: saves selected branch/course/domain and related education data for one student.
+    // Values are expected to come from GLOBAL metadata APIs (e.g., /api/meta/*).
     @PostMapping("/{studentId}/education")
     public EducationProfile createOrUpdateEducation(
             @PathVariable Long studentId,
@@ -45,6 +47,7 @@ public class EducationProfileController {
         return service.createOrUpdateEducation(profile, studentId);
     }
 
+    // USER-SPECIFIC API: fetches one student's education profile using metadata selections.
     @GetMapping("/{studentId}/education")
     public EducationProfile getEducationProfile(@PathVariable Long studentId) {
         return service.getEducationProfile(studentId);
