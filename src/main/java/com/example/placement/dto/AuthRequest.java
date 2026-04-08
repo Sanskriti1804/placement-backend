@@ -2,10 +2,12 @@ package com.example.placement.dto;
 
 import com.example.placement.entity.RoleType;
 
+// DTO for the unified login/register auth endpoint.
 public class AuthRequest {
 
     private String email;
     private String password;
+    private RoleType role;
 
     public String getEmail() {
         return email;
@@ -23,4 +25,11 @@ public class AuthRequest {
         this.password = password;
     }
 
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
+    }
 }

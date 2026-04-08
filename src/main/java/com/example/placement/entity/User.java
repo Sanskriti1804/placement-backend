@@ -18,12 +18,12 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private boolean isPasswordSet = false;
+    // Keep nullable at DB level to avoid startup failure when legacy rows contain NULL.
+    @Column(name = "is_password_set")
+    private Boolean isPasswordSet = false;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    private String phone;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -68,19 +68,19 @@ public class User {
         this.email = email;
     }
 
-    public String getPhone(){
-        return phone;
-    }
-
-    public void setPhone(String phone){
-        this.phone = phone;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles){
         this.roles = roles;
+    }
+
+    public Boolean getIsPasswordSet() {
+        return isPasswordSet;
+    }
+
+    public void setIsPasswordSet(Boolean passwordSet) {
+        isPasswordSet = passwordSet;
     }
 }

@@ -21,6 +21,7 @@ public class StudentProfile {
 
     private String rollNo;
     private String userName;
+    private String phone;
     private String photoUrl;
     private String bio;
 
@@ -67,6 +68,9 @@ public class StudentProfile {
 
     public String getRollNo() { return rollNo; }
     public void setRollNo(String rollNo) { this.rollNo = rollNo; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getPhotoUrl() { return photoUrl; }
     public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }

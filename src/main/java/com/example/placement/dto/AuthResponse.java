@@ -1,18 +1,17 @@
 package com.example.placement.dto;
 
-import com.example.placement.entity.Role;
+import java.util.List;
 
-import java.util.Set;
-
+// DTO returned after successful authentication with JWT token.
 public class AuthResponse {
     private String token;
     private String email;
-    private Set<Role> role;
+    private List<String> roles;
 
-    public AuthResponse(String token, String email, String password){
+    public AuthResponse(String token, String email, List<String> roles){
         this.token = token;
         this.email = email;
-        this.role = role;
+        this.roles = roles;
     }
     // Getter for token
     public String getToken() {
@@ -25,7 +24,7 @@ public class AuthResponse {
     }
 
     // Getter for role
-    public  Set<Role> getRole() {
-        return role;
+    public List<String> getRoles() {
+        return roles;
     }
 }
