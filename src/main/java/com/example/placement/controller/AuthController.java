@@ -1,6 +1,6 @@
 package com.example.placement.controller;
 
-import com.example.placement.dto.LoginRequest;
+import com.example.placement.dto.AuthRequest;
 import com.example.placement.dto.RegisterRequest;
 import com.example.placement.entity.User;
 import com.example.placement.service.AuthService;
@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request) {
+    public User login(@RequestBody AuthRequest request) {
         return authService.login(request);
     }
 }

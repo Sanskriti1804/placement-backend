@@ -18,8 +18,11 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    private boolean isPasswordSet = false;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private String phone;
 
     @ManyToMany(fetch = FetchType.EAGER)

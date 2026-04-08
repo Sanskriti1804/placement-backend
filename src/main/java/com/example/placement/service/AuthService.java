@@ -1,6 +1,6 @@
 package com.example.placement.service;
 
-import com.example.placement.dto.LoginRequest;
+import com.example.placement.dto.AuthRequest;
 import com.example.placement.dto.RegisterRequest;
 import com.example.placement.entity.Role;
 import com.example.placement.entity.RoleType;
@@ -60,7 +60,7 @@ public class AuthService {
         return userRepo.save(user);
     }
 
-    public User login(LoginRequest request) {
+    public User login(AuthRequest request) {
         if (request == null
                 || request.getEmail() == null || request.getEmail().trim().isEmpty()
                 || request.getPassword() == null || request.getPassword().trim().isEmpty()) {

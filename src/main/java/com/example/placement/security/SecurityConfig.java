@@ -1,26 +1,27 @@
-package com.example.placement.config;
+package com.example.placement.security;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration      //config file - scan this clas and register any new beans defined inside for dependency injection
 public class SecurityConfig {
-    @Bean
-    //registers this method's return value as a spring bean
-    public PasswordEncoder passwordEncoder() {
-        //returns bcrypt password encoder - securely hashes pswd b4 saving it in the db
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    //registers this method's return value as a spring bean
+//    public PasswordEncoder passwordEncoder() {
+//        //returns bcrypt password encoder - securely hashes pswd b4 saving it in the db
+//        return new BCryptPasswordEncoder();
+//    }
+
+    //dependencies injected via constructor]
+    private final JwtAuthFilter jwtAuthFilter;      //custom filter to validate jwt tokens
+    private final UserDetailsServiceImpl userDetailsService;
+
 
     @Bean
     //defines the main security config for HTTP req

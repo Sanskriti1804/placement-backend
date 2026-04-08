@@ -1,6 +1,8 @@
 package com.example.placement.dto;
 
-public class LoginRequest {
+import com.example.placement.entity.RoleType;
+
+public class AuthRequest {
 
     private String email;
     private String password;
@@ -20,4 +22,5 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }
