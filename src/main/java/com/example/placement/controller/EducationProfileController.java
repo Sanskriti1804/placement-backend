@@ -32,6 +32,10 @@ public class EducationProfileController {
         profile.setTenthPercentage(request.getTenthPercentage());
         profile.setTwelfthPercentage(request.getTwelfthPercentage());
         profile.setCurrentCgpa(request.getCurrentCgpa());
+        profile.setTenthSchoolName(request.getTenthSchoolName());
+        profile.setTwelfthSchoolName(request.getTwelfthSchoolName());
+        profile.setGraduationCollegeName(request.getGraduationCollegeName());
+        profile.setPostGraduationCollegeName(request.getPostGraduationCollegeName());
         profile.setGapYears(request.getGapYears());
         profile.setGapReason(request.getGapReason());
         if (request.getBacklogs() != null) {

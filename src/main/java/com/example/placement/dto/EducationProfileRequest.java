@@ -17,6 +17,10 @@ public class EducationProfileRequest {
     private BigDecimal tenthPercentage;
     private BigDecimal twelfthPercentage;
     private BigDecimal currentCgpa;
+    private String tenthSchoolName;
+    private String twelfthSchoolName;
+    private String graduationCollegeName;
+    private String postGraduationCollegeName;
     private List<BackLogRequest> backlogs;
     private Integer gapYears;
     private String gapReason;
@@ -47,6 +51,18 @@ public class EducationProfileRequest {
 
     public BigDecimal getCurrentCgpa() { return currentCgpa; }
     public void setCurrentCgpa(BigDecimal currentCgpa) { this.currentCgpa = currentCgpa; }
+
+    public String getTenthSchoolName() { return tenthSchoolName; }
+    public void setTenthSchoolName(String tenthSchoolName) { this.tenthSchoolName = tenthSchoolName; }
+
+    public String getTwelfthSchoolName() { return twelfthSchoolName; }
+    public void setTwelfthSchoolName(String twelfthSchoolName) { this.twelfthSchoolName = twelfthSchoolName; }
+
+    public String getGraduationCollegeName() { return graduationCollegeName; }
+    public void setGraduationCollegeName(String graduationCollegeName) { this.graduationCollegeName = graduationCollegeName; }
+
+    public String getPostGraduationCollegeName() { return postGraduationCollegeName; }
+    public void setPostGraduationCollegeName(String postGraduationCollegeName) { this.postGraduationCollegeName = postGraduationCollegeName; }
 
     public List<BackLogRequest> getBacklogs() { return backlogs; }
     public void setBacklogs(List<BackLogRequest> backlogs) { this.backlogs = backlogs; }

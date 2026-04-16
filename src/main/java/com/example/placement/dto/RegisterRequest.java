@@ -1,22 +1,17 @@
 package com.example.placement.dto;
 
+import com.example.placement.entity.RoleType;
+
 //DTO - data transfer object - carries registeration data from the client to the backend
 public class RegisterRequest {
 
     //fields that the client sends when registering a user
-    private String name;
     private String email;
     private String password;
-    private String phone;
+    private Boolean passwordBased;
+    private RoleType role;
 
     //getters and setters
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
     public String getEmail() {
         return email;
     }
@@ -33,11 +28,19 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public String getPhone() {
-        return phone;
+    public Boolean getPasswordBased() {
+        return passwordBased;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPasswordBased(Boolean passwordBased) {
+        this.passwordBased = passwordBased;
+    }
+
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
     }
 }

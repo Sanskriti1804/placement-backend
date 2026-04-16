@@ -7,7 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 //runs automatically on startup
-@Component      //class - spring managed component - beans
 public class DataInitializer implements CommandLineRunner {
     private final RoleRepo roleRepo;
 
@@ -18,10 +17,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args){
-        for (RoleType roleName : RoleType.values()){
-            //check if role with this name already exists in the db
-            roleRepo.findByRoleName(roleName)
-                .orElseGet(() -> roleRepo.save(new Role(null, roleName)));
-        }
+        // No-op: auth now uses users.role directly (single enum role on users table).
+        // Keeping this class without @Component prevents legacy roles-table seeding.
     }
 }

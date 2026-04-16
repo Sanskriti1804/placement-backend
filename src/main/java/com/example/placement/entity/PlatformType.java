@@ -4,5 +4,8 @@ public enum PlatformType {
     GITHUB,
     LINKEDIN,
     RESUME,
-    PORTFOLIO
+    PORTFOLIO,
+    BEHANCE,
+    DRIBBBLE,
+    LEETCODE
 }

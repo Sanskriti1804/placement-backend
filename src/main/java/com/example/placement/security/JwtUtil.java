@@ -1,6 +1,5 @@
 package com.example.placement.security;
 
-import com.example.placement.entity.Role;
 import com.example.placement.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 // Utility component for generating and validating JWT tokens.
 @Component
@@ -37,9 +35,9 @@ public class JwtUtil {
 
     // Generates a JWT token containing email as subject and roles as a claim.
     public String generateToken(User user){
-        List<String> roles = user.getRoles() == null
+        List<String> roles = user.getRole() == null
                 ? Collections.emptyList()
-                : user.getRoles().stream().map(Role::getRoleName).map(Enum::name).collect(Collectors.toList());
+                : List.of(user.getRole().name());
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("roles", roles)

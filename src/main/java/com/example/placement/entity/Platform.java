@@ -4,14 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+@Table(
+        name = "platform_links",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "platform_type"})
+)
 public class Platform {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "platform_type", nullable = false)
     private PlatformType type;
 
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne(optional = false)

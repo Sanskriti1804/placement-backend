@@ -4,42 +4,36 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
+@Table(name = "student_profile")
 public class StudentProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
-    private String rollNo;
-    private String userName;
-    private String phone;
+    private String name;
+    @Column(name = "domain_role")
+    private String domainRole;
+    @Column(name = "phone_number")
+    private String phoneNumber;
     private String photoUrl;
     private String bio;
-
-    private String address;
+    @Column(name = "address_line")
+    private String addressLine;
     private String city;
     private String state;
-    private String country;
-    private String pinCode;
 
     private LocalDate dob;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_skills",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
-    private Set<Skill> skills = new HashSet<>();
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Skill skills;
 
     @OneToMany(
             mappedBy = "student",
@@ -48,12 +42,8 @@ public class StudentProfile {
             )
     private List<Project> projects = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "student",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Platform> platforms = new ArrayList<>();
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Platform> platformLinks = new ArrayList<>();
 
     //GETTERS AND SETTERS
     public Long getId(){
@@ -66,11 +56,14 @@ public class StudentProfile {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public String getRollNo() { return rollNo; }
-    public void setRollNo(String rollNo) { this.rollNo = rollNo; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getDomainRole() { return domainRole; }
+    public void setDomainRole(String domainRole) { this.domainRole = domainRole; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public String getPhotoUrl() { return photoUrl; }
     public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
@@ -78,13 +71,25 @@ public class StudentProfile {
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }
 
-    public Set<Skill> getSkills(){return skills;}
-    public void setSkills(Set<Skill> skills){this.skills = skills;}
+    public Skill getSkills() { return skills; }
+    public void setSkills(Skill skills) { this.skills = skills; }
 
     public List<Project> getProjects() { return projects; }
     public void setProjects(List<Project> projects) { this.projects = projects; }
 
-    public List<Platform> getLinks() { return platforms; }
-    public void setLinks(List<Platform> platforms) { this.platforms = platforms; }
+    public String getAddressLine() { return addressLine; }
+    public void setAddressLine(String addressLine) { this.addressLine = addressLine; }
+
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+
+    public String getState() { return state; }
+    public void setState(String state) { this.state = state; }
+
+    public LocalDate getDob() { return dob; }
+    public void setDob(LocalDate dob) { this.dob = dob; }
+
+    public List<Platform> getPlatformLinks() { return platformLinks; }
+    public void setPlatformLinks(List<Platform> platformLinks) { this.platformLinks = platformLinks; }
 }
 

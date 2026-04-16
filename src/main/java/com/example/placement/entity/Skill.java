@@ -1,35 +1,68 @@
 package com.example.placement.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
+@Table(name = "skills")
 public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String name;
+    private String languages;
+    private String frameworks;
+    private String tools;
+    private String platforms;
 
-    //Owning Side : Student profile entity - add/del should be done in this side - connected w a field name - "skills"
-    //Inverse/ Non-owning side : Skill entit y
-    @ManyToMany(mappedBy = "skills")
-    @JsonIgnore
-    //Set - no duplicate skill for a student
-    private Set<StudentProfile> students = new HashSet<>();     //initialized - w/o null checks
+    @OneToOne(optional = false)
+    @JoinColumn(name = "student_id", nullable = false, unique = true)
+    private StudentProfile student;
 
-    public void setName(String name) {
-        this.name = name;
-    }
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(String languages) {
+        this.languages = languages;
+    }
+
+    public String getFrameworks() {
+        return frameworks;
+    }
+
+    public void setFrameworks(String frameworks) {
+        this.frameworks = frameworks;
+    }
+
+    public String getTools() {
+        return tools;
+    }
+
+    public void setTools(String tools) {
+        this.tools = tools;
+    }
+
+    public String getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(String platforms) {
+        this.platforms = platforms;
+    }
+
+    public StudentProfile getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentProfile student) {
+        this.student = student;
     }
 }

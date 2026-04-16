@@ -64,6 +64,10 @@ public class EducationalProfileService {
         existing.setTenthPercentage(educationProfile.getTenthPercentage());
         existing.setTwelfthPercentage(educationProfile.getTwelfthPercentage());
         existing.setCurrentCgpa(educationProfile.getCurrentCgpa());
+        existing.setTenthSchoolName(educationProfile.getTenthSchoolName());
+        existing.setTwelfthSchoolName(educationProfile.getTwelfthSchoolName());
+        existing.setGraduationCollegeName(educationProfile.getGraduationCollegeName());
+        existing.setPostGraduationCollegeName(educationProfile.getPostGraduationCollegeName());
         existing.setGapYears(educationProfile.getGapYears());
         existing.setGapReason(educationProfile.getGapReason());
 

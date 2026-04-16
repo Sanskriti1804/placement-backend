@@ -1,6 +1,5 @@
 package com.example.placement.security;
 
-import com.example.placement.entity.Role;
 import com.example.placement.entity.User;
 import com.example.placement.repository.UserRepo;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,14 +27,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        List<GrantedAuthority> authorities = user.getRoles() == null
+        List<GrantedAuthority> authorities = user.getRole() == null
                 ? Collections.emptyList()
-                : user.getRoles().stream()
-                .map(Role::getRoleName)
-                .map(Enum::name)
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .map(GrantedAuthority.class::cast)
-                .toList();
+                : List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword() == null ? "" : user.getPassword())

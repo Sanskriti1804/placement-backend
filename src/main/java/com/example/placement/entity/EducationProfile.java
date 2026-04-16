@@ -37,6 +37,14 @@ public class EducationProfile {
     private BigDecimal twelfthPercentage;
     @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal currentCgpa;
+    @Column(name = "tenth_school_name")
+    private String tenthSchoolName;
+    @Column(name = "twelfth_school_name")
+    private String twelfthSchoolName;
+    @Column(name = "graduation_college_name")
+    private String graduationCollegeName;
+    @Column(name = "post_graduation_college_name")
+    private String postGraduationCollegeName;
 
     private Integer gapYears;
     private String gapReason;
@@ -122,6 +130,38 @@ public class EducationProfile {
 
     public void setCurrentCgpa(BigDecimal currentCgpa) {
         this.currentCgpa = currentCgpa;
+    }
+
+    public String getTenthSchoolName() {
+        return tenthSchoolName;
+    }
+
+    public void setTenthSchoolName(String tenthSchoolName) {
+        this.tenthSchoolName = tenthSchoolName;
+    }
+
+    public String getTwelfthSchoolName() {
+        return twelfthSchoolName;
+    }
+
+    public void setTwelfthSchoolName(String twelfthSchoolName) {
+        this.twelfthSchoolName = twelfthSchoolName;
+    }
+
+    public String getGraduationCollegeName() {
+        return graduationCollegeName;
+    }
+
+    public void setGraduationCollegeName(String graduationCollegeName) {
+        this.graduationCollegeName = graduationCollegeName;
+    }
+
+    public String getPostGraduationCollegeName() {
+        return postGraduationCollegeName;
+    }
+
+    public void setPostGraduationCollegeName(String postGraduationCollegeName) {
+        this.postGraduationCollegeName = postGraduationCollegeName;
     }
 
     public Integer getGapYears() {

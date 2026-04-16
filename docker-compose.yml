@@ -5,6 +5,7 @@ services:
 
   postgres:
     image: postgres:15
+
     container_name: placement-postgres
     restart: always
     #enc var - initialized the db automatically

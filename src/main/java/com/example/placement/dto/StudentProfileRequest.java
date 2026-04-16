@@ -1,13 +1,17 @@
 package com.example.placement.dto;
 
-import java.util.Set;
-
 public class StudentProfileRequest {
     private Long userId;
-    private String rollNo;
+    private String name;
+    private String domainRole;
+    private String phoneNumber;
     private String photoUrl;
     private String bio;
-    private Set<String> skills;
+    private String addressLine;
+    private String city;
+    private String state;
+    private java.time.LocalDate dob;
+    private SkillRequest skills;
 
     public Long getUserId() {
         return userId;
@@ -17,13 +21,28 @@ public class StudentProfileRequest {
         this.userId = userId;
     }
 
-    // Getter and Setter for rollNo
-    public String getRollNo() {
-        return rollNo;
+    public String getName() {
+        return name;
     }
 
-    public void setRollNo(String rollNo) {
-        this.rollNo = rollNo;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDomainRole() {
+        return domainRole;
+    }
+
+    public void setDomainRole(String domainRole) {
+        this.domainRole = domainRole;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     // Getter and Setter for photoUrl
@@ -44,17 +63,43 @@ public class StudentProfileRequest {
         this.bio = bio;
     }
 
-    // Getter and Setter for skills
-    public Set<String> getSkills() {
+    public String getAddressLine() {
+        return addressLine;
+    }
+
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public java.time.LocalDate getDob() {
+        return dob;
+    }
+
+    public void setDob(java.time.LocalDate dob) {
+        this.dob = dob;
+    }
+
+    public SkillRequest getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<String> skills) {
+    public void setSkills(SkillRequest skills) {
         this.skills = skills;
     }
 }
-
-//NO Skill DTO because Skill is treated as a simple reusable tag (using names as input),
-// not a full API resource—you only need a DTO if you expose it separately (e.g., with IDs, endpoints, or responses).
-//You’re sending:{ "skills": ["Java", "Spring"]}
-//NOT: {  "skills": [  { "id": 1, "name": "Java" } ]}

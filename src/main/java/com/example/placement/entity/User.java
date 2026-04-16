@@ -3,9 +3,6 @@ package com.example.placement.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -13,27 +10,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     @Column(unique = true, nullable = false)
     private String email;
 
-    // Keep nullable at DB level to avoid startup failure when legacy rows contain NULL.
-    @Column(name = "is_password_set")
-    private Boolean isPasswordSet = false;
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",        //name of the join table in the db
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RoleType role;
 
-    //new column
-    private Set<Role> roles = new HashSet<>();      //collection of roles assigned to the user
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private java.time.Instant createdAt;
+
+    @PrePersist
+    void onCreate() {
+        if (createdAt == null) {
+            createdAt = java.time.Instant.now();
+        }
+    }
 
     //GETTERS AND SETTERS
     public Long getId(){
@@ -42,14 +38,6 @@ public class User {
 
     public void setId(Long id){
         this.id = id;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
     }
 
     public String getPassword(){
@@ -68,19 +56,19 @@ public class User {
         this.email = email;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public RoleType getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles){
-        this.roles = roles;
+    public void setRole(RoleType role) {
+        this.role = role;
     }
 
-    public Boolean getIsPasswordSet() {
-        return isPasswordSet;
+    public java.time.Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setIsPasswordSet(Boolean passwordSet) {
-        isPasswordSet = passwordSet;
+    public void setCreatedAt(java.time.Instant createdAt) {
+        this.createdAt = createdAt;
     }
 }
