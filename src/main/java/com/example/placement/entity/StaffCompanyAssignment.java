@@ -1,5 +1,7 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.CompanyProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -28,7 +30,7 @@ public class StaffCompanyAssignment {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    private CompanyProfile company;
 
     public Long getId() {
         return id;
@@ -46,11 +48,11 @@ public class StaffCompanyAssignment {
         this.staff = staff;
     }
 
-    public Company getCompany() {
+    public CompanyProfile getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(CompanyProfile company) {
         this.company = company;
     }
 }

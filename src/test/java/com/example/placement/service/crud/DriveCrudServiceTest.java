@@ -3,7 +3,7 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.DriveCreateRequest;
 import com.example.placement.entity.types.BranchType;
 import com.example.placement.entity.types.JobResultStatus;
-import com.example.placement.entity.Company;
+import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.entity.PlacementCoordinator;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.DriveRepo;
@@ -51,7 +51,7 @@ class DriveCrudServiceTest {
 
     @BeforeEach
     void stubs() {
-        when(companyRepo.findById(1L)).thenReturn(Optional.of(new Company()));
+        when(companyRepo.findById(1L)).thenReturn(Optional.of(new CompanyProfile()));
         when(coordinatorRepo.findById(1L)).thenReturn(Optional.of(new PlacementCoordinator()));
         when(driveRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
     }

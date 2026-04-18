@@ -14,7 +14,9 @@ public class JobResponse {
 
     private Long id;
     private Long companyId;
+    private CompanyResponse company;
     private Long placementCoordinatorId;
+    private PlacementCoordinatorResponse placementCoordinator;
     private JobType jobType;
     private String internshipDuration;
     private WorkMode workMode;
@@ -50,12 +52,28 @@ public class JobResponse {
         this.companyId = companyId;
     }
 
+    public CompanyResponse getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyResponse company) {
+        this.company = company;
+    }
+
     public Long getPlacementCoordinatorId() {
         return placementCoordinatorId;
     }
 
     public void setPlacementCoordinatorId(Long placementCoordinatorId) {
         this.placementCoordinatorId = placementCoordinatorId;
+    }
+
+    public PlacementCoordinatorResponse getPlacementCoordinator() {
+        return placementCoordinator;
+    }
+
+    public void setPlacementCoordinator(PlacementCoordinatorResponse placementCoordinator) {
+        this.placementCoordinator = placementCoordinator;
     }
 
     public JobType getJobType() {

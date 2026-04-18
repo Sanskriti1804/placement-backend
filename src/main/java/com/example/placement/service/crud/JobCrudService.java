@@ -6,8 +6,8 @@ import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
 import com.example.placement.dto.placement.JobSelectionRoundResponse;
 import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
 import com.example.placement.dto.placement.JobUpdateRequest;
-import com.example.placement.entity.Company;
-import com.example.placement.entity.Job;
+import com.example.placement.entity.main.CompanyProfile;
+import com.example.placement.entity.main.JobProfile;
 import com.example.placement.entity.types.JobResultStatus;
 import com.example.placement.entity.JobSelectionRound;
 import com.example.placement.entity.types.JobType;
@@ -54,7 +54,7 @@ public class JobCrudService {
         }
     }
 
-    private void validateJobProfileRules(Job job) {
+    private void validateJobProfileRules(JobProfile job) {
         if (job.getPlacementCoordinator() == null) {
             throw new IllegalArgumentException("placementCoordinatorId is required");
         }
@@ -67,7 +67,7 @@ public class JobCrudService {
         }
     }
 
-    private void normalizeInternshipDuration(Job job) {
+    private void normalizeInternshipDuration(JobProfile job) {
         if (job.getJobType() != JobType.INTERNSHIP) {
             job.setInternshipDuration(null);
         }
@@ -82,11 +82,11 @@ public class JobCrudService {
             throw new IllegalArgumentException("placementCoordinatorId is required");
         }
         validateInternshipFieldsOnCreate(req.getJobType(), req.getInternshipDuration());
-        Company company = companyRepo.findById(req.getCompanyId())
+        CompanyProfile company = companyRepo.findById(req.getCompanyId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
         PlacementCoordinator pc = coordinatorRepo.findById(req.getPlacementCoordinatorId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordinator not found"));
-        Job job = new Job();
+        JobProfile job = new JobProfile();
         job.setCompany(company);
         job.setPlacementCoordinator(pc);
         job.setJobType(req.getJobType());
@@ -106,7 +106,7 @@ public class JobCrudService {
         job.setResultDate(req.getResultDate());
         normalizeInternshipDuration(job);
         validateJobProfileRules(job);
-        Job saved = jobRepo.save(job);
+        JobProfile saved = jobRepo.save(job);
         if (req.getSelectionRounds() != null) {
             for (JobSelectionRoundCreateRequest rc : req.getSelectionRounds()) {
                 if (rc.getRoundName() == null || rc.getRoundName().isBlank() || rc.getSequenceOrder() == null) {
@@ -127,10 +127,10 @@ public class JobCrudService {
 
     @Transactional
     public JobResponse update(Long id, JobUpdateRequest req) {
-        Job job = jobRepo.findById(id)
+        JobProfile job = jobRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
         if (req.getCompanyId() != null) {
-            Company company = companyRepo.findById(req.getCompanyId())
+            CompanyProfile company = companyRepo.findById(req.getCompanyId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
             job.setCompany(company);
         }
@@ -206,7 +206,7 @@ public class JobCrudService {
 
     @Transactional(readOnly = true)
     public JobResponse get(Long id) {
-        Job job = jobRepo.findById(id)
+        JobProfile job = jobRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
         job.getSelectionRounds().size();
         return PlacementDtoMapper.toJobResponse(job);

@@ -5,7 +5,7 @@ import com.example.placement.dto.placement.StaffDepartmentAssignmentResponse;
 import com.example.placement.dto.placement.StaffDepartmentAssignmentUpdateRequest;
 import com.example.placement.entity.Department;
 import com.example.placement.entity.StaffDepartmentAssignment;
-import com.example.placement.entity.StaffProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.example.placement.repository.DepartmentRepo;
 import com.example.placement.repository.StaffDepartmentAssignmentRepo;
 import com.example.placement.repository.StaffProfileRepo;

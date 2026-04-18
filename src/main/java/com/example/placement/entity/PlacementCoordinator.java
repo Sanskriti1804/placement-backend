@@ -1,5 +1,7 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.entity.main.JobProfile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -35,11 +37,11 @@ public class PlacementCoordinator {
 
     @OneToMany(mappedBy = "placementCoordinator")
     @JsonIgnore
-    private List<Job> jobs = new ArrayList<>();
+    private List<JobProfile> jobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "placementCoordinator")
     @JsonIgnore
-    private List<Drive> drives = new ArrayList<>();
+    private List<DriveProfile> drives = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -81,19 +83,19 @@ public class PlacementCoordinator {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Job> getJobs() {
+    public List<JobProfile> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<Job> jobs) {
+    public void setJobs(List<JobProfile> jobs) {
         this.jobs = jobs;
     }
 
-    public List<Drive> getDrives() {
+    public List<DriveProfile> getDrives() {
         return drives;
     }
 
-    public void setDrives(List<Drive> drives) {
+    public void setDrives(List<DriveProfile> drives) {
         this.drives = drives;
     }
 }

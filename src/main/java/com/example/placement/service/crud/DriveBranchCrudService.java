@@ -3,7 +3,7 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.DriveBranchCreateRequest;
 import com.example.placement.dto.placement.DriveBranchResponse;
 import com.example.placement.dto.placement.DriveBranchUpdateRequest;
-import com.example.placement.entity.Drive;
+import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.DriveBranch;
 import com.example.placement.repository.DriveBranchRepo;
 import com.example.placement.repository.DriveRepo;
@@ -30,7 +30,7 @@ public class DriveBranchCrudService {
         if (req.getDriveId() == null || req.getBranch() == null) {
             throw new IllegalArgumentException("driveId and branch are required");
         }
-        Drive drive = driveRepo.findById(req.getDriveId())
+        DriveProfile drive = driveRepo.findById(req.getDriveId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
         DriveBranch e = new DriveBranch();
         e.setDrive(drive);

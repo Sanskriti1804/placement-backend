@@ -1,5 +1,6 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.types.BranchType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -22,7 +23,7 @@ public class DriveBranch {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "drive_id", nullable = false)
     @JsonIgnore
-    private Drive drive;
+    private DriveProfile drive;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 64)
@@ -36,11 +37,11 @@ public class DriveBranch {
         this.id = id;
     }
 
-    public Drive getDrive() {
+    public DriveProfile getDrive() {
         return drive;
     }
 
-    public void setDrive(Drive drive) {
+    public void setDrive(DriveProfile drive) {
         this.drive = drive;
     }
 

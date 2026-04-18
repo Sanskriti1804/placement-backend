@@ -1,5 +1,9 @@
-package com.example.placement.entity;
+package com.example.placement.entity.main;
 
+import com.example.placement.entity.Platform;
+import com.example.placement.entity.Project;
+import com.example.placement.entity.Skill;
+import com.example.placement.entity.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

@@ -3,7 +3,7 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.DriveOfferedRoleCreateRequest;
 import com.example.placement.dto.placement.DriveOfferedRoleResponse;
 import com.example.placement.dto.placement.DriveOfferedRoleUpdateRequest;
-import com.example.placement.entity.Drive;
+import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.DriveOfferedRole;
 import com.example.placement.repository.DriveOfferedRoleRepo;
 import com.example.placement.repository.DriveRepo;
@@ -32,7 +32,7 @@ public class DriveOfferedRoleCrudService {
         if (req.getDriveId() == null || req.getRoleTitle() == null || req.getRoleTitle().isBlank()) {
             throw new IllegalArgumentException("driveId and roleTitle are required");
         }
-        Drive drive = driveRepo.findById(req.getDriveId())
+        DriveProfile drive = driveRepo.findById(req.getDriveId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
         if (repo.countByDrive_Id(drive.getId()) >= MAX_ROLES_PER_DRIVE) {
             throw new IllegalArgumentException("A drive may have at most " + MAX_ROLES_PER_DRIVE + " offered roles");

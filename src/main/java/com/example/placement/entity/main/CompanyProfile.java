@@ -1,5 +1,6 @@
-package com.example.placement.entity;
+package com.example.placement.entity.main;
 
+import com.example.placement.entity.Industry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
                 @Index(name = "idx_company_email", columnList = "email")
         }
 )
-public class Company {
+public class CompanyProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,11 +49,11 @@ public class Company {
 
     @OneToMany(mappedBy = "company")
     @JsonIgnore
-    private List<Job> jobs = new ArrayList<>();
+    private List<JobProfile> jobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "company")
     @JsonIgnore
-    private List<Drive> drives = new ArrayList<>();
+    private List<DriveProfile> drives = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -126,19 +127,19 @@ public class Company {
         this.imageUrl = imageUrl;
     }
 
-    public List<Job> getJobs() {
+    public List<JobProfile> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<Job> jobs) {
+    public void setJobs(List<JobProfile> jobs) {
         this.jobs = jobs;
     }
 
-    public List<Drive> getDrives() {
+    public List<DriveProfile> getDrives() {
         return drives;
     }
 
-    public void setDrives(List<Drive> drives) {
+    public void setDrives(List<DriveProfile> drives) {
         this.drives = drives;
     }
 }

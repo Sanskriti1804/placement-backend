@@ -3,7 +3,7 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.DriveSelectionRoundResponse;
 import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
 import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
-import com.example.placement.entity.Drive;
+import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.DriveSelectionRound;
 import com.example.placement.entity.RoundCompletionStatus;
 import com.example.placement.repository.DriveRepo;
@@ -34,7 +34,7 @@ public class DriveSelectionRoundCrudService {
         if (req.getRoundName() == null || req.getRoundName().isBlank() || req.getSequenceOrder() == null) {
             throw new IllegalArgumentException("roundName and sequenceOrder are required");
         }
-        Drive drive = driveRepo.findById(driveId)
+        DriveProfile drive = driveRepo.findById(driveId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
         DriveSelectionRound e = new DriveSelectionRound();
         e.setDrive(drive);

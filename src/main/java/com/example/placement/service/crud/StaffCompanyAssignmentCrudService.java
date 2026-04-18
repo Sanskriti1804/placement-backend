@@ -3,9 +3,9 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.StaffCompanyAssignmentCreateRequest;
 import com.example.placement.dto.placement.StaffCompanyAssignmentResponse;
 import com.example.placement.dto.placement.StaffCompanyAssignmentUpdateRequest;
-import com.example.placement.entity.Company;
+import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.entity.StaffCompanyAssignment;
-import com.example.placement.entity.StaffProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.StaffCompanyAssignmentRepo;
 import com.example.placement.repository.StaffProfileRepo;
@@ -40,7 +40,7 @@ public class StaffCompanyAssignmentCrudService {
         }
         StaffProfile staff = staffProfileRepo.findById(req.getStaffProfileId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff profile not found"));
-        Company company = companyRepo.findById(req.getCompanyId())
+        CompanyProfile company = companyRepo.findById(req.getCompanyId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
         StaffCompanyAssignment e = new StaffCompanyAssignment();
         e.setStaff(staff);
@@ -53,7 +53,7 @@ public class StaffCompanyAssignmentCrudService {
         StaffCompanyAssignment e = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found"));
         if (req.getCompanyId() != null) {
-            Company company = companyRepo.findById(req.getCompanyId())
+            CompanyProfile company = companyRepo.findById(req.getCompanyId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
             e.setCompany(company);
         }

@@ -1,6 +1,7 @@
 package com.example.placement.service.crud;
 
 import com.example.placement.dto.placement.JobCreateRequest;
+import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.entity.types.JobType;
 import com.example.placement.entity.WorkMode;
 import com.example.placement.repository.CompanyRepo;
@@ -43,7 +44,7 @@ class JobCrudServiceTest {
     @BeforeEach
     void stubLookups() {
         org.mockito.Mockito.when(companyRepo.findById(1L))
-                .thenReturn(java.util.Optional.of(new com.example.placement.entity.Company()));
+                .thenReturn(java.util.Optional.of(new CompanyProfile()));
         org.mockito.Mockito.when(coordinatorRepo.findById(1L))
                 .thenReturn(java.util.Optional.of(new com.example.placement.entity.PlacementCoordinator()));
         org.mockito.Mockito.when(jobRepo.save(org.mockito.Mockito.any()))

@@ -3,9 +3,9 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.StaffDriveAssignmentCreateRequest;
 import com.example.placement.dto.placement.StaffDriveAssignmentResponse;
 import com.example.placement.dto.placement.StaffDriveAssignmentUpdateRequest;
-import com.example.placement.entity.Drive;
+import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.StaffDriveAssignment;
-import com.example.placement.entity.StaffProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.example.placement.repository.DriveRepo;
 import com.example.placement.repository.StaffDriveAssignmentRepo;
 import com.example.placement.repository.StaffProfileRepo;
@@ -40,7 +40,7 @@ public class StaffDriveAssignmentCrudService {
         }
         StaffProfile staff = staffProfileRepo.findById(req.getStaffProfileId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff profile not found"));
-        Drive drive = driveRepo.findById(req.getDriveId())
+        DriveProfile drive = driveRepo.findById(req.getDriveId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
         StaffDriveAssignment e = new StaffDriveAssignment();
         e.setStaff(staff);
@@ -53,7 +53,7 @@ public class StaffDriveAssignmentCrudService {
         StaffDriveAssignment e = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found"));
         if (req.getDriveId() != null) {
-            Drive drive = driveRepo.findById(req.getDriveId())
+            DriveProfile drive = driveRepo.findById(req.getDriveId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
             e.setDrive(drive);
         }

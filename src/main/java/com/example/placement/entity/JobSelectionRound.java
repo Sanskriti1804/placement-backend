@@ -1,5 +1,6 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.JobProfile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -26,7 +27,7 @@ public class JobSelectionRound {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", nullable = false)
     @JsonIgnore
-    private Job job;
+    private JobProfile job;
 
     @Column(name = "round_name", nullable = false, length = 255)
     private String roundName;
@@ -49,11 +50,11 @@ public class JobSelectionRound {
         this.id = id;
     }
 
-    public Job getJob() {
+    public JobProfile getJob() {
         return job;
     }
 
-    public void setJob(Job job) {
+    public void setJob(JobProfile job) {
         this.job = job;
     }
 

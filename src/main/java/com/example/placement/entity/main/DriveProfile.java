@@ -1,5 +1,6 @@
-package com.example.placement.entity;
+package com.example.placement.entity.main;
 
+import com.example.placement.entity.*;
 import com.example.placement.entity.types.JobResultStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -18,7 +19,7 @@ import java.util.List;
                 @Index(name = "idx_drive_reg_deadline", columnList = "registration_deadline")
         }
 )
-public class Drive {
+public class DriveProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +31,7 @@ public class Drive {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     @JsonIgnore
-    private Company company;
+    private CompanyProfile company;
 
     @Column(name = "registration_deadline", nullable = false)
     private LocalDateTime registrationDeadline;
@@ -98,11 +99,11 @@ public class Drive {
         this.driveName = driveName;
     }
 
-    public Company getCompany() {
+    public CompanyProfile getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(CompanyProfile company) {
         this.company = company;
     }
 

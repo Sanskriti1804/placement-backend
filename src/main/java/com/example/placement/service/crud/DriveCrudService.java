@@ -8,8 +8,8 @@ import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
 import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
 import com.example.placement.entity.types.BranchType;
 import com.example.placement.entity.types.JobResultStatus;
-import com.example.placement.entity.Company;
-import com.example.placement.entity.Drive;
+import com.example.placement.entity.main.CompanyProfile;
+import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.DriveBranch;
 import com.example.placement.entity.DriveOfferedRole;
 import com.example.placement.entity.DriveSelectionRound;
@@ -80,7 +80,7 @@ public class DriveCrudService {
         }
     }
 
-    private void normalizeResultFields(Drive d) {
+    private void normalizeResultFields(DriveProfile d) {
         if (d.getResultStatus() == null) {
             d.setResultStatus(JobResultStatus.NOT_ANNOUNCED);
         }
@@ -89,7 +89,7 @@ public class DriveCrudService {
         }
     }
 
-    private void validateResultFields(Drive d) {
+    private void validateResultFields(DriveProfile d) {
         if (d.getResultStatus() == JobResultStatus.ANNOUNCED && d.getResultDate() == null) {
             throw new IllegalArgumentException("resultDate is required when resultStatus is ANNOUNCED");
         }
@@ -105,11 +105,11 @@ public class DriveCrudService {
             throw new IllegalArgumentException("placementCoordinatorId is required");
         }
         validateBranchesAndRoles(req.getAllowedBranches(), req.getOfferedRoleTitles());
-        Company company = companyRepo.findById(req.getCompanyId())
+        CompanyProfile company = companyRepo.findById(req.getCompanyId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
         PlacementCoordinator pc = coordinatorRepo.findById(req.getPlacementCoordinatorId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordinator not found"));
-        Drive d = new Drive();
+        DriveProfile d = new DriveProfile();
         d.setDriveName(req.getDriveName().trim());
         d.setCompany(company);
         d.setRegistrationDeadline(req.getRegistrationDeadline());
@@ -120,7 +120,7 @@ public class DriveCrudService {
         d.setPlacementCoordinator(pc);
         normalizeResultFields(d);
         validateResultFields(d);
-        Drive saved = driveRepo.save(d);
+        DriveProfile saved = driveRepo.save(d);
         if (req.getAllowedBranches() != null) {
             for (BranchType b : req.getAllowedBranches()) {
                 if (b == null) {
@@ -166,7 +166,7 @@ public class DriveCrudService {
 
     @Transactional
     public DriveResponse update(Long id, DriveUpdateRequest req) {
-        Drive d = driveRepo.findById(id)
+        DriveProfile d = driveRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
         if (req.getAllowedBranches() != null || req.getOfferedRoleTitles() != null) {
             validateBranchesAndRoles(
@@ -182,7 +182,7 @@ public class DriveCrudService {
             d.setDriveName(req.getDriveName().trim());
         }
         if (req.getCompanyId() != null) {
-            Company company = companyRepo.findById(req.getCompanyId())
+            CompanyProfile company = companyRepo.findById(req.getCompanyId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
             d.setCompany(company);
         }
@@ -247,7 +247,7 @@ public class DriveCrudService {
         }
         normalizeResultFields(d);
         validateResultFields(d);
-        Drive saved = driveRepo.save(d);
+        DriveProfile saved = driveRepo.save(d);
         saved.getAllowedBranches().size();
         saved.getOfferedRoles().size();
         saved.getSelectionRounds().size();
@@ -256,7 +256,7 @@ public class DriveCrudService {
 
     @Transactional(readOnly = true)
     public DriveResponse get(Long id) {
-        Drive d = driveRepo.findById(id)
+        DriveProfile d = driveRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
         d.getAllowedBranches().size();
         d.getOfferedRoles().size();

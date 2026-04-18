@@ -4,7 +4,7 @@ import com.example.placement.dto.BackLogRequest;
 import com.example.placement.dto.EducationProfileRequest;
 import com.example.placement.entity.Backlog;
 import com.example.placement.entity.EducationProfile;
-import com.example.placement.entity.StudentProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.BackLogRepo;
 import com.example.placement.repository.EducationalProfileRepo;
 import com.example.placement.repository.StudentProfileRepo;

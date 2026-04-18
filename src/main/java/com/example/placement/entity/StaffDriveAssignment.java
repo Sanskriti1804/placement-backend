@@ -1,5 +1,7 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -28,7 +30,7 @@ public class StaffDriveAssignment {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "drive_id", nullable = false)
-    private Drive drive;
+    private DriveProfile drive;
 
     public Long getId() {
         return id;
@@ -46,11 +48,11 @@ public class StaffDriveAssignment {
         this.staff = staff;
     }
 
-    public Drive getDrive() {
+    public DriveProfile getDrive() {
         return drive;
     }
 
-    public void setDrive(Drive drive) {
+    public void setDrive(DriveProfile drive) {
         this.drive = drive;
     }
 }

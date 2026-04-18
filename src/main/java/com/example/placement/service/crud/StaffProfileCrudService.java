@@ -4,6 +4,10 @@ import com.example.placement.dto.placement.StaffProfileCreateRequest;
 import com.example.placement.dto.placement.StaffProfileResponse;
 import com.example.placement.dto.placement.StaffProfileUpdateRequest;
 import com.example.placement.entity.*;
+import com.example.placement.entity.main.CompanyProfile;
+import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.entity.main.StaffProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -137,7 +141,7 @@ public class StaffProfileCrudService {
         if (companyIds != null) {
             s.getCompanyAssignments().clear();
             for (Long cid : companyIds) {
-                Company c = companyRepo.findById(cid)
+                CompanyProfile c = companyRepo.findById(cid)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
                 StaffCompanyAssignment a = new StaffCompanyAssignment();
                 a.setStaff(s);
@@ -148,7 +152,7 @@ public class StaffProfileCrudService {
         if (driveIds != null) {
             s.getDriveAssignments().clear();
             for (Long did : driveIds) {
-                Drive d = driveRepo.findById(did)
+                DriveProfile d = driveRepo.findById(did)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
                 StaffDriveAssignment a = new StaffDriveAssignment();
                 a.setStaff(s);

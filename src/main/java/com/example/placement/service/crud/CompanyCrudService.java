@@ -3,7 +3,7 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.CompanyCreateRequest;
 import com.example.placement.dto.placement.CompanyResponse;
 import com.example.placement.dto.placement.CompanyUpdateRequest;
-import com.example.placement.entity.Company;
+import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.IndustryRepo;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class CompanyCrudService {
         if (req.getName() == null || req.getName().isBlank()) {
             throw new IllegalArgumentException("name is required");
         }
-        Company e = new Company();
+        CompanyProfile e = new CompanyProfile();
         e.setName(req.getName().trim());
         e.setTagline(req.getTagline());
         e.setLocation(req.getLocation());
@@ -46,7 +46,7 @@ public class CompanyCrudService {
 
     @Transactional
     public CompanyResponse update(Long id, CompanyUpdateRequest req) {
-        Company e = companyRepo.findById(id)
+        CompanyProfile e = companyRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
         if (req.getName() != null && !req.getName().isBlank()) {
             e.setName(req.getName().trim());

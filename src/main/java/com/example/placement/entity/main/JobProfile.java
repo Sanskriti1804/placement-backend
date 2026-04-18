@@ -1,5 +1,8 @@
-package com.example.placement.entity;
+package com.example.placement.entity.main;
 
+import com.example.placement.entity.JobSelectionRound;
+import com.example.placement.entity.PlacementCoordinator;
+import com.example.placement.entity.WorkMode;
 import com.example.placement.entity.types.JobResultStatus;
 import com.example.placement.entity.types.JobType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +25,7 @@ import java.util.List;
                 @Index(name = "idx_job_work_mode", columnList = "work_mode")
         }
 )
-public class Job {
+public class JobProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +34,7 @@ public class Job {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     @JsonIgnore
-    private Company company;
+    private CompanyProfile company;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "job_type", nullable = false, length = 32)
@@ -117,11 +120,11 @@ public class Job {
         this.id = id;
     }
 
-    public Company getCompany() {
+    public CompanyProfile getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(CompanyProfile company) {
         this.company = company;
     }
 

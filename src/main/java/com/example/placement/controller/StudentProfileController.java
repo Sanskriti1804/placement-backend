@@ -3,11 +3,10 @@ package com.example.placement.controller;
 import com.example.placement.dto.PlatformLinkRequest;
 import com.example.placement.dto.ProjectRequest;
 import com.example.placement.dto.StudentProfileRequest;
-import com.example.placement.dto.StudentProfileResponse;
 import com.example.placement.entity.Platform;
 import com.example.placement.entity.Project;
 import com.example.placement.entity.Skill;
-import com.example.placement.entity.StudentProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.service.StudentProfileService;
 import org.springframework.web.bind.annotation.*;
 

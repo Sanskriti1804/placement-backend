@@ -2,7 +2,7 @@ package com.example.placement.service.crud;
 
 import com.example.placement.dto.StudentProfileRequest;
 import com.example.placement.entity.Skill;
-import com.example.placement.entity.StudentProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.entity.User;
 import com.example.placement.repository.SkillsRepo;
 import com.example.placement.repository.StudentProfileRepo;

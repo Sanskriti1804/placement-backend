@@ -2,7 +2,7 @@ package com.example.placement.service.crud;
 
 import com.example.placement.dto.PlatformLinkRequest;
 import com.example.placement.entity.Platform;
-import com.example.placement.entity.StudentProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.PlatformRepo;
 import com.example.placement.repository.StudentProfileRepo;
 import org.springframework.http.HttpStatus;

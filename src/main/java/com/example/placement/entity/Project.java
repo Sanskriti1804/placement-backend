@@ -1,5 +1,6 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.StudentProfile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

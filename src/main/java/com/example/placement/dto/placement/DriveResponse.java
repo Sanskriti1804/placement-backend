@@ -12,6 +12,7 @@ public class DriveResponse {
     private Long id;
     private String driveName;
     private Long companyId;
+    private CompanyResponse company;
     private LocalDateTime registrationDeadline;
     private LocalDateTime driveDateTime;
     private String venue;
@@ -19,6 +20,7 @@ public class DriveResponse {
     private LocalDate resultDate;
     private String resultDisplay;
     private Long placementCoordinatorId;
+    private PlacementCoordinatorResponse placementCoordinator;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<DriveBranchResponse> allowedBranches = new ArrayList<>();
@@ -47,6 +49,14 @@ public class DriveResponse {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public CompanyResponse getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyResponse company) {
+        this.company = company;
     }
 
     public LocalDateTime getRegistrationDeadline() {
@@ -103,6 +113,14 @@ public class DriveResponse {
 
     public void setPlacementCoordinatorId(Long placementCoordinatorId) {
         this.placementCoordinatorId = placementCoordinatorId;
+    }
+
+    public PlacementCoordinatorResponse getPlacementCoordinator() {
+        return placementCoordinator;
+    }
+
+    public void setPlacementCoordinator(PlacementCoordinatorResponse placementCoordinator) {
+        this.placementCoordinator = placementCoordinator;
     }
 
     public LocalDateTime getCreatedAt() {

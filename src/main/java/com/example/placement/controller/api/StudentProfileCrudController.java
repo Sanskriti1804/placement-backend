@@ -1,7 +1,7 @@
 package com.example.placement.controller.api;
 
 import com.example.placement.dto.StudentProfileRequest;
-import com.example.placement.entity.StudentProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.service.crud.StudentProfileCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

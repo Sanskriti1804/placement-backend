@@ -1,6 +1,6 @@
 package com.example.placement.repository;
 
-import com.example.placement.entity.StaffProfile;
+import com.example.placement.entity.main.StaffProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

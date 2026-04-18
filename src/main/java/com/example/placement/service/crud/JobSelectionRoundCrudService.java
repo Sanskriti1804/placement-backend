@@ -3,7 +3,7 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
 import com.example.placement.dto.placement.JobSelectionRoundResponse;
 import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
-import com.example.placement.entity.Job;
+import com.example.placement.entity.main.JobProfile;
 import com.example.placement.entity.JobSelectionRound;
 import com.example.placement.entity.RoundCompletionStatus;
 import com.example.placement.repository.JobRepo;
@@ -34,7 +34,7 @@ public class JobSelectionRoundCrudService {
         if (req.getRoundName() == null || req.getRoundName().isBlank() || req.getSequenceOrder() == null) {
             throw new IllegalArgumentException("roundName and sequenceOrder are required");
         }
-        Job job = jobRepo.findById(jobId)
+        JobProfile job = jobRepo.findById(jobId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
         JobSelectionRound e = new JobSelectionRound();
         e.setJob(job);

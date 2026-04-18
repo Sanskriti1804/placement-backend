@@ -3,6 +3,10 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.RoleResponse;
 import com.example.placement.dto.placement.*;
 import com.example.placement.entity.*;
+import com.example.placement.entity.main.CompanyProfile;
+import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.entity.main.JobProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.example.placement.entity.types.JobResultStatus;
 
 import java.time.LocalDate;
@@ -24,7 +28,7 @@ public final class PlacementDtoMapper {
         return r;
     }
 
-    public static CompanyResponse toCompanyResponse(Company e) {
+    public static CompanyResponse toCompanyResponse(CompanyProfile e) {
         CompanyResponse r = new CompanyResponse();
         r.setId(e.getId());
         r.setName(e.getName());
@@ -59,11 +63,17 @@ public final class PlacementDtoMapper {
         return r;
     }
 
-    public static JobResponse toJobResponse(Job e) {
+    public static JobResponse toJobResponse(JobProfile e) {
         JobResponse r = new JobResponse();
         r.setId(e.getId());
         r.setCompanyId(e.getCompany() != null ? e.getCompany().getId() : null);
+        if (e.getCompany() != null) {
+            r.setCompany(toCompanyResponse(e.getCompany()));
+        }
         r.setPlacementCoordinatorId(e.getPlacementCoordinator() != null ? e.getPlacementCoordinator().getId() : null);
+        if (e.getPlacementCoordinator() != null) {
+            r.setPlacementCoordinator(toCoordinatorResponse(e.getPlacementCoordinator()));
+        }
         r.setJobType(e.getJobType());
         r.setInternshipDuration(e.getInternshipDuration());
         r.setWorkMode(e.getWorkMode());
@@ -123,11 +133,14 @@ public final class PlacementDtoMapper {
         return resultDate != null ? resultDate.toString() : "";
     }
 
-    public static DriveResponse toDriveResponse(Drive e) {
+    public static DriveResponse toDriveResponse(DriveProfile e) {
         DriveResponse r = new DriveResponse();
         r.setId(e.getId());
         r.setDriveName(e.getDriveName());
         r.setCompanyId(e.getCompany() != null ? e.getCompany().getId() : null);
+        if (e.getCompany() != null) {
+            r.setCompany(toCompanyResponse(e.getCompany()));
+        }
         r.setRegistrationDeadline(e.getRegistrationDeadline());
         r.setDriveDateTime(e.getDriveDateTime());
         r.setVenue(e.getVenue());
@@ -135,6 +148,9 @@ public final class PlacementDtoMapper {
         r.setResultDate(e.getResultDate());
         r.setResultDisplay(driveResultDisplay(e.getResultStatus(), e.getResultDate()));
         r.setPlacementCoordinatorId(e.getPlacementCoordinator() != null ? e.getPlacementCoordinator().getId() : null);
+        if (e.getPlacementCoordinator() != null) {
+            r.setPlacementCoordinator(toCoordinatorResponse(e.getPlacementCoordinator()));
+        }
         r.setCreatedAt(e.getCreatedAt());
         r.setUpdatedAt(e.getUpdatedAt());
         List<DriveBranchResponse> br = new ArrayList<>();

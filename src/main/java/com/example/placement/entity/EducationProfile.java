@@ -1,5 +1,6 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.entity.types.BranchType;
 import com.example.placement.entity.types.CourseType;
 import com.example.placement.entity.types.DomainType;

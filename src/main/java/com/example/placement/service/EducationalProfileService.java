@@ -6,7 +6,7 @@ import com.example.placement.entity.types.BranchType;
 import com.example.placement.entity.types.CourseType;
 import com.example.placement.entity.types.DomainType;
 import com.example.placement.entity.EducationProfile;
-import com.example.placement.entity.StudentProfile;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.BackLogRepo;
 import com.example.placement.repository.EducationalProfileRepo;
 import com.example.placement.repository.StudentProfileRepo;

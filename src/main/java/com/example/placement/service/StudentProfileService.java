@@ -1,6 +1,7 @@
 package com.example.placement.service;
 
 import com.example.placement.entity.*;
+import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.entity.types.PlatformType;
 import com.example.placement.repository.*;
 import org.springframework.http.HttpStatus;
