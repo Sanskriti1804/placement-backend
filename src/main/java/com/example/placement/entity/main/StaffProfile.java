@@ -1,10 +1,10 @@
 package com.example.placement.entity.main;
 
-import com.example.placement.entity.*;
+import com.example.placement.entity.StaffManagedRole;
+import com.example.placement.entity.StaffProfessionalExperience;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +31,17 @@ public class StaffProfile {
     @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(name = "user_email", length = 320)
+    private String userEmail;
+
     @Column(nullable = false, length = 320)
     private String email;
 
     @Column(name = "phone_number", length = 32)
     private String phoneNumber;
+
+    @Column(name = "linkedin", length = 2048)
+    private String linkedin;
 
     @Column(name = "office_location", length = 512)
     private String officeLocation;
@@ -43,44 +49,33 @@ public class StaffProfile {
     @Column(name = "college_name", length = 255)
     private String collegeName;
 
-    @Column(name = "faculty_duty", columnDefinition = "TEXT")
-    private String facultyDuty;
+    @Column(name = "joining_year")
+    private Integer joiningYear;
 
-    @Column(name = "placement_duty", columnDefinition = "TEXT")
-    private String placementDuty;
+    @Column(name = "joining_month")
+    private Integer joiningMonth;
 
-    @Column(name = "staff_current_role", length = 255)
-    private String currentRole;
+    @Column(name = "ending_year")
+    private Integer endingYear;
 
-    @Column(name = "placement_responsibilities", columnDefinition = "TEXT")
-    private String placementResponsibilities;
+    @Column(name = "ending_month")
+    private Integer endingMonth;
 
-    @Column(columnDefinition = "TEXT")
-    private String qualification;
+    @ElementCollection
+    @CollectionTable(name = "staff_subjects", joinColumns = @JoinColumn(name = "staff_id"))
+    @Column(name = "subject_line", length = 512)
+    private List<String> subjects = new ArrayList<>();
 
-    @Column(columnDefinition = "TEXT")
-    private String experience;
-
-    @Column(name = "subjects_taught", columnDefinition = "TEXT")
-    private String subjectsTaught;
-
-    @Column(name = "start_date")
-    private LocalDate startDate;
-
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @ElementCollection
+    @CollectionTable(name = "staff_qualifications", joinColumns = @JoinColumn(name = "staff_id"))
+    @Column(name = "qualification_line", length = 512)
+    private List<String> qualifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StaffCompanyAssignment> companyAssignments = new ArrayList<>();
+    private List<StaffProfessionalExperience> professionalExperiences = new ArrayList<>();
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StaffDriveAssignment> driveAssignments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StaffStudentAssignment> studentAssignments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StaffDepartmentAssignment> departmentAssignments = new ArrayList<>();
+    private List<StaffManagedRole> managedRoles = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -106,6 +101,14 @@ public class StaffProfile {
         this.name = name;
     }
 
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -120,6 +123,14 @@ public class StaffProfile {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getLinkedin() {
+        return linkedin;
+    }
+
+    public void setLinkedin(String linkedin) {
+        this.linkedin = linkedin;
     }
 
     public String getOfficeLocation() {
@@ -138,107 +149,67 @@ public class StaffProfile {
         this.collegeName = collegeName;
     }
 
-    public String getFacultyDuty() {
-        return facultyDuty;
+    public Integer getJoiningYear() {
+        return joiningYear;
     }
 
-    public void setFacultyDuty(String facultyDuty) {
-        this.facultyDuty = facultyDuty;
+    public void setJoiningYear(Integer joiningYear) {
+        this.joiningYear = joiningYear;
     }
 
-    public String getPlacementDuty() {
-        return placementDuty;
+    public Integer getJoiningMonth() {
+        return joiningMonth;
     }
 
-    public void setPlacementDuty(String placementDuty) {
-        this.placementDuty = placementDuty;
+    public void setJoiningMonth(Integer joiningMonth) {
+        this.joiningMonth = joiningMonth;
     }
 
-    public String getCurrentRole() {
-        return currentRole;
+    public Integer getEndingYear() {
+        return endingYear;
     }
 
-    public void setCurrentRole(String currentRole) {
-        this.currentRole = currentRole;
+    public void setEndingYear(Integer endingYear) {
+        this.endingYear = endingYear;
     }
 
-    public String getPlacementResponsibilities() {
-        return placementResponsibilities;
+    public Integer getEndingMonth() {
+        return endingMonth;
     }
 
-    public void setPlacementResponsibilities(String placementResponsibilities) {
-        this.placementResponsibilities = placementResponsibilities;
+    public void setEndingMonth(Integer endingMonth) {
+        this.endingMonth = endingMonth;
     }
 
-    public String getQualification() {
-        return qualification;
+    public List<String> getSubjects() {
+        return subjects;
     }
 
-    public void setQualification(String qualification) {
-        this.qualification = qualification;
+    public void setSubjects(List<String> subjects) {
+        this.subjects = subjects;
     }
 
-    public String getExperience() {
-        return experience;
+    public List<String> getQualifications() {
+        return qualifications;
     }
 
-    public void setExperience(String experience) {
-        this.experience = experience;
+    public void setQualifications(List<String> qualifications) {
+        this.qualifications = qualifications;
     }
 
-    public String getSubjectsTaught() {
-        return subjectsTaught;
+    public List<StaffProfessionalExperience> getProfessionalExperiences() {
+        return professionalExperiences;
     }
 
-    public void setSubjectsTaught(String subjectsTaught) {
-        this.subjectsTaught = subjectsTaught;
+    public void setProfessionalExperiences(List<StaffProfessionalExperience> professionalExperiences) {
+        this.professionalExperiences = professionalExperiences;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public List<StaffManagedRole> getManagedRoles() {
+        return managedRoles;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public List<StaffCompanyAssignment> getCompanyAssignments() {
-        return companyAssignments;
-    }
-
-    public void setCompanyAssignments(List<StaffCompanyAssignment> companyAssignments) {
-        this.companyAssignments = companyAssignments;
-    }
-
-    public List<StaffDriveAssignment> getDriveAssignments() {
-        return driveAssignments;
-    }
-
-    public void setDriveAssignments(List<StaffDriveAssignment> driveAssignments) {
-        this.driveAssignments = driveAssignments;
-    }
-
-    public List<StaffStudentAssignment> getStudentAssignments() {
-        return studentAssignments;
-    }
-
-    public void setStudentAssignments(List<StaffStudentAssignment> studentAssignments) {
-        this.studentAssignments = studentAssignments;
-    }
-
-    public List<StaffDepartmentAssignment> getDepartmentAssignments() {
-        return departmentAssignments;
-    }
-
-    public void setDepartmentAssignments(List<StaffDepartmentAssignment> departmentAssignments) {
-        this.departmentAssignments = departmentAssignments;
+    public void setManagedRoles(List<StaffManagedRole> managedRoles) {
+        this.managedRoles = managedRoles;
     }
 }

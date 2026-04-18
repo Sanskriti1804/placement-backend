@@ -2,10 +2,10 @@ package com.example.placement.service;
 
 import com.example.placement.config.EducationMapping;
 import com.example.placement.entity.Backlog;
-import com.example.placement.entity.types.BranchType;
-import com.example.placement.entity.types.CourseType;
-import com.example.placement.entity.types.DomainType;
-import com.example.placement.entity.EducationProfile;
+import com.example.placement.common.enums.BranchType;
+import com.example.placement.common.enums.CourseType;
+import com.example.placement.common.enums.DomainType;
+import com.example.placement.entity.Education;
 import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.BackLogRepo;
 import com.example.placement.repository.EducationalProfileRepo;
@@ -30,13 +30,13 @@ public class EducationalProfileService {
         this.backLogRepo = backLogRepo;
     }
 
-    public EducationProfile createOrUpdateEducation(EducationProfile educationProfile, Long studentId) {
+    public Education createOrUpdateEducation(Education educationProfile, Long studentId) {
         //fetch student or throws error
         StudentProfile student = studentRepo.findById(studentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
 
         //check if profile already exists
-        EducationProfile existing = educationRepo.findByStudent_Id(studentId).orElse(null);
+        Education existing = educationRepo.findByStudent_Id(studentId).orElse(null);
 
         //if no existing profile
         if (existing == null) {
@@ -84,8 +84,8 @@ public class EducationalProfileService {
         return educationRepo.save(existing);
     }
 
-    public EducationProfile getEducationProfile(Long studentId) {
-        EducationProfile profile =  educationRepo.findByStudent_Id(studentId)
+    public Education getEducationProfile(Long studentId) {
+        Education profile =  educationRepo.findByStudent_Id(studentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "education profile no found"));
         //manually fetch backlogs and attach - avoids lazy loading issues
         profile.setBacklogs(backLogRepo.findByEducationProfile_Id(profile.getId()));

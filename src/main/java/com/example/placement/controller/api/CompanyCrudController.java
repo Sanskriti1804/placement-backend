@@ -1,8 +1,8 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.placement.CompanyCreateRequest;
-import com.example.placement.dto.placement.CompanyResponse;
-import com.example.placement.dto.placement.CompanyUpdateRequest;
+import com.example.placement.dto.company.CompanyCreateRequest;
+import com.example.placement.dto.company.CompanyResponse;
+import com.example.placement.dto.company.CompanyUpdateRequest;
 import com.example.placement.service.crud.CompanyCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

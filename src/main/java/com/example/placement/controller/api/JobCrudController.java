@@ -1,9 +1,9 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.placement.JobCreateRequest;
-import com.example.placement.dto.placement.JobResponse;
-import com.example.placement.dto.placement.JobSelectionRoundResponse;
-import com.example.placement.dto.placement.JobUpdateRequest;
+import com.example.placement.dto.job.JobCreateRequest;
+import com.example.placement.dto.job.JobResponse;
+import com.example.placement.dto.selection.SelectionRoundResponse;
+import com.example.placement.dto.job.JobUpdateRequest;
 import com.example.placement.service.crud.JobCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class JobCrudController {
     }
 
     @GetMapping("/{jobId}/selection-rounds")
-    public List<JobSelectionRoundResponse> listSelectionRounds(@PathVariable Long jobId) {
+    public List<SelectionRoundResponse> listSelectionRounds(@PathVariable Long jobId) {
         return jobCrudService.listSelectionRoundsForJob(jobId);
     }
 

@@ -1,8 +1,8 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.RegisterRequest;
-import com.example.placement.dto.UserUpdateRequest;
-import com.example.placement.entity.User;
+import com.example.placement.dto.auth.RegisterRequest;
+import com.example.placement.dto.user.UserUpdateRequest;
+import com.example.placement.entity.main.User;
 import com.example.placement.service.crud.UserCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

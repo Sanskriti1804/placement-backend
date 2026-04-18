@@ -1,6 +1,6 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.BackLogRequest;
+import com.example.placement.dto.student.BackLogRequest;
 import com.example.placement.entity.Backlog;
 import com.example.placement.service.crud.BacklogCrudService;
 import org.springframework.http.HttpStatus;

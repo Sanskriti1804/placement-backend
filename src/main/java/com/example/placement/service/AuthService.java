@@ -1,10 +1,10 @@
 package com.example.placement.service;
 
-import com.example.placement.dto.AuthRequest;
-import com.example.placement.dto.AuthResponse;
-import com.example.placement.dto.RegisterRequest;
-import com.example.placement.entity.RoleType;
-import com.example.placement.entity.User;
+import com.example.placement.dto.auth.AuthRequest;
+import com.example.placement.dto.auth.AuthResponse;
+import com.example.placement.dto.auth.RegisterRequest;
+import com.example.placement.common.enums.RoleType;
+import com.example.placement.entity.main.User;
 import com.example.placement.repository.UserRepo;
 import com.example.placement.security.JwtUtil;
 import org.springframework.http.HttpStatus;

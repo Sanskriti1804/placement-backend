@@ -1,8 +1,8 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.RoleCreateRequest;
-import com.example.placement.dto.RoleResponse;
-import com.example.placement.dto.RoleUpdateRequest;
+import com.example.placement.dto.role.RoleCreateRequest;
+import com.example.placement.dto.role.RoleResponse;
+import com.example.placement.dto.role.RoleUpdateRequest;
 import com.example.placement.entity.Role;
 import com.example.placement.repository.RoleRepo;
 import org.springframework.http.HttpStatus;

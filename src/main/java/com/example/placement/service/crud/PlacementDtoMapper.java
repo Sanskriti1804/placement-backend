@@ -1,13 +1,25 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.RoleResponse;
-import com.example.placement.dto.placement.*;
+import com.example.placement.common.entity.SelectionRound;
+import com.example.placement.dto.company.CompanyContactSupportResponse;
+import com.example.placement.dto.company.CompanyResponse;
+import com.example.placement.dto.common.PlacementCoordinatorResponse;
+import com.example.placement.dto.department.DepartmentResponse;
+import com.example.placement.dto.drive.DriveBranchResponse;
+import com.example.placement.dto.drive.DriveOfferedRoleResponse;
+import com.example.placement.dto.drive.DriveResponse;
+import com.example.placement.dto.job.JobResponse;
+import com.example.placement.dto.role.RoleResponse;
+import com.example.placement.dto.selection.SelectionRoundResponse;
+import com.example.placement.dto.staff.StaffManagedRoleResponse;
+import com.example.placement.dto.staff.StaffProfessionalExperienceResponse;
+import com.example.placement.dto.staff.StaffProfileResponse;
 import com.example.placement.entity.*;
 import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.main.JobProfile;
 import com.example.placement.entity.main.StaffProfile;
-import com.example.placement.entity.types.JobResultStatus;
+import com.example.placement.common.enums.JobResultStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,12 +31,13 @@ public final class PlacementDtoMapper {
     private PlacementDtoMapper() {
     }
 
-    public static IndustryResponse toIndustryResponse(Industry e) {
-        IndustryResponse r = new IndustryResponse();
+    public static CompanyContactSupportResponse toContactSupportResponse(CompanyContactSupport e) {
+        CompanyContactSupportResponse r = new CompanyContactSupportResponse();
         r.setId(e.getId());
         r.setName(e.getName());
-        r.setCode(e.getCode());
-        r.setDescription(e.getDescription());
+        r.setEmail(e.getEmail());
+        r.setPhone(e.getPhone());
+        r.setPreferredMode(e.getPreferredMode());
         return r;
     }
 
@@ -36,30 +49,40 @@ public final class PlacementDtoMapper {
         r.setLocation(e.getLocation());
         r.setEmail(e.getEmail());
         r.setWebsiteUrl(e.getWebsiteUrl());
-        r.setIndustryId(e.getIndustry() != null ? e.getIndustry().getId() : null);
         r.setDescription(e.getDescription());
+        r.setOverview(e.getOverview());
+        r.setSector(e.getSector());
         r.setImageUrl(e.getImageUrl());
+        r.setDocumentUrls(e.getDocumentUrls() != null ? new ArrayList<>(e.getDocumentUrls()) : new ArrayList<>());
+        List<CompanyContactSupportResponse> cs = new ArrayList<>();
+        if (e.getContactSupports() != null) {
+            for (CompanyContactSupport c : e.getContactSupports()) {
+                cs.add(toContactSupportResponse(c));
+            }
+        }
+        r.setContactSupports(cs);
         return r;
     }
 
-    public static PlacementCoordinatorResponse toCoordinatorResponse(PlacementCoordinator e) {
+    public static PlacementCoordinatorResponse toCoordinatorResponse(StaffProfile e) {
         PlacementCoordinatorResponse r = new PlacementCoordinatorResponse();
         r.setId(e.getId());
         r.setName(e.getName());
         r.setEmail(e.getEmail());
-        r.setInMail(e.getInMail());
+        r.setInMail(e.getLinkedin());
         r.setPhoneNumber(e.getPhoneNumber());
         return r;
     }
 
-    public static JobSelectionRoundResponse toRoundResponse(JobSelectionRound e) {
-        JobSelectionRoundResponse r = new JobSelectionRoundResponse();
+    public static SelectionRoundResponse toSelectionRoundResponse(SelectionRound e) {
+        SelectionRoundResponse r = new SelectionRoundResponse();
         r.setId(e.getId());
         r.setJobId(e.getJob() != null ? e.getJob().getId() : null);
+        r.setDriveId(e.getDrive() != null ? e.getDrive().getId() : null);
         r.setRoundName(e.getRoundName());
-        r.setSequenceOrder(e.getSequenceOrder());
+        r.setSequenceNumber(e.getSequenceNumber());
         r.setScheduledDate(e.getScheduledDate());
-        r.setCompletionStatus(e.getCompletionStatus());
+        r.setCompleted(e.isCompleted());
         return r;
     }
 
@@ -91,11 +114,11 @@ public final class PlacementDtoMapper {
         r.setResultDate(e.getResultDate());
         r.setCreatedAt(e.getCreatedAt());
         r.setUpdatedAt(e.getUpdatedAt());
-        List<JobSelectionRoundResponse> rounds = new ArrayList<>();
+        List<SelectionRoundResponse> rounds = new ArrayList<>();
         if (e.getSelectionRounds() != null) {
             e.getSelectionRounds().stream()
-                    .sorted(Comparator.comparing(JobSelectionRound::getSequenceOrder, Comparator.nullsLast(Integer::compareTo)))
-                    .forEach(sr -> rounds.add(toRoundResponse(sr)));
+                    .sorted(Comparator.comparing(SelectionRound::getSequenceNumber, Comparator.nullsLast(Integer::compareTo)))
+                    .forEach(sr -> rounds.add(toSelectionRoundResponse(sr)));
         }
         r.setSelectionRounds(rounds);
         return r;
@@ -111,18 +134,8 @@ public final class PlacementDtoMapper {
     public static DriveOfferedRoleResponse toDriveOfferedRoleResponse(DriveOfferedRole e) {
         DriveOfferedRoleResponse r = new DriveOfferedRoleResponse();
         r.setId(e.getId());
-        r.setRoleTitle(e.getRoleTitle());
-        return r;
-    }
-
-    public static DriveSelectionRoundResponse toDriveSelectionRoundResponse(DriveSelectionRound e) {
-        DriveSelectionRoundResponse r = new DriveSelectionRoundResponse();
-        r.setId(e.getId());
-        r.setDriveId(e.getDrive() != null ? e.getDrive().getId() : null);
-        r.setRoundName(e.getRoundName());
-        r.setSequenceOrder(e.getSequenceOrder());
-        r.setScheduledDate(e.getScheduledDate());
-        r.setCompletionStatus(e.getCompletionStatus());
+        r.setRoleName(e.getRoleName());
+        r.setLinkedJobId(e.getLinkedJob() != null ? e.getLinkedJob().getId() : null);
         return r;
     }
 
@@ -141,7 +154,7 @@ public final class PlacementDtoMapper {
         if (e.getCompany() != null) {
             r.setCompany(toCompanyResponse(e.getCompany()));
         }
-        r.setRegistrationDeadline(e.getRegistrationDeadline());
+        r.setLastDateToApply(e.getLastDateToApply());
         r.setDriveDateTime(e.getDriveDateTime());
         r.setVenue(e.getVenue());
         r.setResultStatus(e.getResultStatus());
@@ -167,11 +180,11 @@ public final class PlacementDtoMapper {
                     .forEach(o -> or.add(toDriveOfferedRoleResponse(o)));
         }
         r.setOfferedRoles(or);
-        List<DriveSelectionRoundResponse> rounds = new ArrayList<>();
+        List<SelectionRoundResponse> rounds = new ArrayList<>();
         if (e.getSelectionRounds() != null) {
             e.getSelectionRounds().stream()
-                    .sorted(Comparator.comparing(DriveSelectionRound::getSequenceOrder, Comparator.nullsLast(Integer::compareTo)))
-                    .forEach(sr -> rounds.add(toDriveSelectionRoundResponse(sr)));
+                    .sorted(Comparator.comparing(SelectionRound::getSequenceNumber, Comparator.nullsLast(Integer::compareTo)))
+                    .forEach(sr -> rounds.add(toSelectionRoundResponse(sr)));
         }
         r.setSelectionRounds(rounds);
         return r;
@@ -186,35 +199,24 @@ public final class PlacementDtoMapper {
         return r;
     }
 
-    public static StaffCompanyAssignmentResponse toStaffCompanyAssignmentResponse(StaffCompanyAssignment e) {
-        StaffCompanyAssignmentResponse r = new StaffCompanyAssignmentResponse();
+    public static StaffManagedRoleResponse toStaffManagedRoleResponse(StaffManagedRole e) {
+        StaffManagedRoleResponse r = new StaffManagedRoleResponse();
         r.setId(e.getId());
-        r.setStaffProfileId(e.getStaff() != null ? e.getStaff().getId() : null);
-        r.setCompanyId(e.getCompany() != null ? e.getCompany().getId() : null);
+        r.setCompanyIds(e.getCompanyIds() != null ? new ArrayList<>(e.getCompanyIds()) : new ArrayList<>());
+        r.setDriveIds(e.getDriveIds() != null ? new ArrayList<>(e.getDriveIds()) : new ArrayList<>());
+        r.setStudentIds(e.getStudentIds() != null ? new ArrayList<>(e.getStudentIds()) : new ArrayList<>());
+        r.setDepartments(e.getDepartments() != null ? new ArrayList<>(e.getDepartments()) : new ArrayList<>());
         return r;
     }
 
-    public static StaffDriveAssignmentResponse toStaffDriveAssignmentResponse(StaffDriveAssignment e) {
-        StaffDriveAssignmentResponse r = new StaffDriveAssignmentResponse();
+    public static StaffProfessionalExperienceResponse toStaffProfessionalExperienceResponse(StaffProfessionalExperience e) {
+        StaffProfessionalExperienceResponse r = new StaffProfessionalExperienceResponse();
         r.setId(e.getId());
-        r.setStaffProfileId(e.getStaff() != null ? e.getStaff().getId() : null);
-        r.setDriveId(e.getDrive() != null ? e.getDrive().getId() : null);
-        return r;
-    }
-
-    public static StaffStudentAssignmentResponse toStaffStudentAssignmentResponse(StaffStudentAssignment e) {
-        StaffStudentAssignmentResponse r = new StaffStudentAssignmentResponse();
-        r.setId(e.getId());
-        r.setStaffProfileId(e.getStaff() != null ? e.getStaff().getId() : null);
-        r.setStudentProfileId(e.getStudent() != null ? e.getStudent().getId() : null);
-        return r;
-    }
-
-    public static StaffDepartmentAssignmentResponse toStaffDepartmentAssignmentResponse(StaffDepartmentAssignment e) {
-        StaffDepartmentAssignmentResponse r = new StaffDepartmentAssignmentResponse();
-        r.setId(e.getId());
-        r.setStaffProfileId(e.getStaff() != null ? e.getStaff().getId() : null);
-        r.setDepartmentId(e.getDepartment() != null ? e.getDepartment().getId() : null);
+        r.setCompanyName(e.getCompanyName());
+        r.setRoleTitle(e.getRoleTitle());
+        r.setFromDate(e.getFromDate());
+        r.setToDate(e.getToDate());
+        r.setDescription(e.getDescription());
         return r;
     }
 
@@ -223,47 +225,32 @@ public final class PlacementDtoMapper {
         r.setId(e.getId());
         r.setUserId(e.getUser() != null ? e.getUser().getId() : null);
         r.setName(e.getName());
+        r.setUserEmail(e.getUserEmail());
         r.setEmail(e.getEmail());
         r.setPhoneNumber(e.getPhoneNumber());
+        r.setLinkedin(e.getLinkedin());
         r.setOfficeLocation(e.getOfficeLocation());
         r.setCollegeName(e.getCollegeName());
-        r.setFacultyDuty(e.getFacultyDuty());
-        r.setPlacementDuty(e.getPlacementDuty());
-        r.setCurrentRole(e.getCurrentRole());
-        r.setPlacementResponsibilities(e.getPlacementResponsibilities());
-        r.setQualification(e.getQualification());
-        r.setExperience(e.getExperience());
-        r.setSubjectsTaught(e.getSubjectsTaught());
-        r.setStartDate(e.getStartDate());
-        r.setEndDate(e.getEndDate());
-        List<StaffCompanyAssignmentResponse> ca = new ArrayList<>();
-        if (e.getCompanyAssignments() != null) {
-            for (StaffCompanyAssignment a : e.getCompanyAssignments()) {
-                ca.add(toStaffCompanyAssignmentResponse(a));
+        r.setJoiningYear(e.getJoiningYear());
+        r.setJoiningMonth(e.getJoiningMonth());
+        r.setEndingYear(e.getEndingYear());
+        r.setEndingMonth(e.getEndingMonth());
+        r.setSubjects(e.getSubjects() != null ? new ArrayList<>(e.getSubjects()) : new ArrayList<>());
+        r.setQualifications(e.getQualifications() != null ? new ArrayList<>(e.getQualifications()) : new ArrayList<>());
+        List<StaffProfessionalExperienceResponse> pe = new ArrayList<>();
+        if (e.getProfessionalExperiences() != null) {
+            for (StaffProfessionalExperience x : e.getProfessionalExperiences()) {
+                pe.add(toStaffProfessionalExperienceResponse(x));
             }
         }
-        r.setCompanyAssignments(ca);
-        List<StaffDriveAssignmentResponse> da = new ArrayList<>();
-        if (e.getDriveAssignments() != null) {
-            for (StaffDriveAssignment a : e.getDriveAssignments()) {
-                da.add(toStaffDriveAssignmentResponse(a));
+        r.setProfessionalExperiences(pe);
+        List<StaffManagedRoleResponse> mr = new ArrayList<>();
+        if (e.getManagedRoles() != null) {
+            for (StaffManagedRole m : e.getManagedRoles()) {
+                mr.add(toStaffManagedRoleResponse(m));
             }
         }
-        r.setDriveAssignments(da);
-        List<StaffStudentAssignmentResponse> sa = new ArrayList<>();
-        if (e.getStudentAssignments() != null) {
-            for (StaffStudentAssignment a : e.getStudentAssignments()) {
-                sa.add(toStaffStudentAssignmentResponse(a));
-            }
-        }
-        r.setStudentAssignments(sa);
-        List<StaffDepartmentAssignmentResponse> depta = new ArrayList<>();
-        if (e.getDepartmentAssignments() != null) {
-            for (StaffDepartmentAssignment a : e.getDepartmentAssignments()) {
-                depta.add(toStaffDepartmentAssignmentResponse(a));
-            }
-        }
-        r.setDepartmentAssignments(depta);
+        r.setManagedRoles(mr);
         return r;
     }
 

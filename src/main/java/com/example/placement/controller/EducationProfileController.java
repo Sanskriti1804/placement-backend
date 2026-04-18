@@ -1,9 +1,9 @@
 package com.example.placement.controller;
 
-import com.example.placement.dto.BackLogRequest;
-import com.example.placement.dto.EducationProfileRequest;
+import com.example.placement.dto.student.BackLogRequest;
+import com.example.placement.dto.student.EducationProfileRequest;
 import com.example.placement.entity.Backlog;
-import com.example.placement.entity.EducationProfile;
+import com.example.placement.entity.Education;
 import com.example.placement.service.EducationalProfileService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +19,11 @@ public class EducationProfileController {
     // USER-SPECIFIC API: saves selected branch/course/domain and related education data for one student.
     // Values are expected to come from GLOBAL metadata APIs (e.g., /api/meta/*).
     @PostMapping("/{studentId}/education")
-    public EducationProfile createOrUpdateEducation(
+    public Education createOrUpdateEducation(
             @PathVariable Long studentId,
             @RequestBody EducationProfileRequest request
     ) {
-        EducationProfile profile = new EducationProfile();
+        Education profile = new Education();
         profile.setUniversity(request.getUniversity());
         profile.setBranch(request.getBranch());
         profile.setCourse(request.getCourse());
@@ -53,7 +53,7 @@ public class EducationProfileController {
 
     // USER-SPECIFIC API: fetches one student's education profile using metadata selections.
     @GetMapping("/{studentId}/education")
-    public EducationProfile getEducationProfile(@PathVariable Long studentId) {
+    public Education getEducationProfile(@PathVariable Long studentId) {
         return service.getEducationProfile(studentId);
     }
 

@@ -1,8 +1,8 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.DepartmentCreateRequest;
-import com.example.placement.dto.placement.DepartmentResponse;
-import com.example.placement.dto.placement.DepartmentUpdateRequest;
+import com.example.placement.dto.department.DepartmentCreateRequest;
+import com.example.placement.dto.department.DepartmentResponse;
+import com.example.placement.dto.department.DepartmentUpdateRequest;
 import com.example.placement.entity.Department;
 import com.example.placement.repository.DepartmentRepo;
 import org.springframework.http.HttpStatus;

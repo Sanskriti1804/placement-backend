@@ -1,6 +1,6 @@
 package com.example.placement.security;
 
-import com.example.placement.entity.User;
+import com.example.placement.entity.main.User;
 import com.example.placement.repository.UserRepo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

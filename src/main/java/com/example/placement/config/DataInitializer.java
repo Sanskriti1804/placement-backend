@@ -1,10 +1,7 @@
 package com.example.placement.config;
 
-import com.example.placement.entity.Role;
-import com.example.placement.entity.RoleType;
 import com.example.placement.repository.RoleRepo;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 //runs automatically on startup
 public class DataInitializer implements CommandLineRunner {

@@ -1,6 +1,7 @@
 package com.example.placement.entity;
 
 import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.entity.main.JobProfile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -25,7 +26,12 @@ public class DriveOfferedRole {
     private DriveProfile drive;
 
     @Column(name = "role_title", nullable = false, length = 255)
-    private String roleTitle;
+    private String roleName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "linked_job_id")
+    @JsonIgnore
+    private JobProfile linkedJob;
 
     public Long getId() {
         return id;
@@ -43,11 +49,19 @@ public class DriveOfferedRole {
         this.drive = drive;
     }
 
-    public String getRoleTitle() {
-        return roleTitle;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRoleTitle(String roleTitle) {
-        this.roleTitle = roleTitle;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public JobProfile getLinkedJob() {
+        return linkedJob;
+    }
+
+    public void setLinkedJob(JobProfile linkedJob) {
+        this.linkedJob = linkedJob;
     }
 }

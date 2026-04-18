@@ -1,27 +1,46 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.CompanyCreateRequest;
-import com.example.placement.dto.placement.CompanyResponse;
-import com.example.placement.dto.placement.CompanyUpdateRequest;
+import com.example.placement.dto.company.CompanyContactSupportRequest;
+import com.example.placement.dto.company.CompanyCreateRequest;
+import com.example.placement.dto.company.CompanyResponse;
+import com.example.placement.dto.company.CompanyUpdateRequest;
+import com.example.placement.entity.CompanyContactSupport;
 import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.repository.CompanyRepo;
-import com.example.placement.repository.IndustryRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CompanyCrudService {
 
     private final CompanyRepo companyRepo;
-    private final IndustryRepo industryRepo;
 
-    public CompanyCrudService(CompanyRepo companyRepo, IndustryRepo industryRepo) {
+    public CompanyCrudService(CompanyRepo companyRepo) {
         this.companyRepo = companyRepo;
-        this.industryRepo = industryRepo;
+    }
+
+    private static void applyContactSupports(CompanyProfile e, List<CompanyContactSupportRequest> reqs) {
+        if (reqs == null) {
+            return;
+        }
+        e.getContactSupports().clear();
+        for (CompanyContactSupportRequest r : reqs) {
+            if (r.getName() == null || r.getName().isBlank() || r.getEmail() == null || r.getEmail().isBlank()) {
+                throw new IllegalArgumentException("Each contact support entry requires name and email");
+            }
+            CompanyContactSupport c = new CompanyContactSupport();
+            c.setCompany(e);
+            c.setName(r.getName().trim());
+            c.setEmail(r.getEmail().trim());
+            c.setPhone(r.getPhone());
+            c.setPreferredMode(r.getPreferredMode());
+            e.getContactSupports().add(c);
+        }
     }
 
     @Transactional
@@ -36,12 +55,16 @@ public class CompanyCrudService {
         e.setEmail(req.getEmail());
         e.setWebsiteUrl(req.getWebsiteUrl());
         e.setDescription(req.getDescription());
+        e.setOverview(req.getOverview());
+        e.setSector(req.getSector());
         e.setImageUrl(req.getImageUrl());
-        if (req.getIndustryId() != null) {
-            e.setIndustry(industryRepo.findById(req.getIndustryId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Industry not found")));
+        if (req.getDocumentUrls() != null) {
+            e.setDocumentUrls(new ArrayList<>(req.getDocumentUrls()));
         }
-        return PlacementDtoMapper.toCompanyResponse(companyRepo.save(e));
+        applyContactSupports(e, req.getContactSupports());
+        CompanyProfile saved = companyRepo.save(e);
+        saved.getContactSupports().size();
+        return PlacementDtoMapper.toCompanyResponse(saved);
     }
 
     @Transactional
@@ -66,25 +89,40 @@ public class CompanyCrudService {
         if (req.getDescription() != null) {
             e.setDescription(req.getDescription());
         }
+        if (req.getOverview() != null) {
+            e.setOverview(req.getOverview());
+        }
+        if (req.getSector() != null) {
+            e.setSector(req.getSector());
+        }
         if (req.getImageUrl() != null) {
             e.setImageUrl(req.getImageUrl());
         }
-        if (req.getIndustryId() != null) {
-            e.setIndustry(industryRepo.findById(req.getIndustryId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Industry not found")));
+        if (req.getDocumentUrls() != null) {
+            e.setDocumentUrls(new ArrayList<>(req.getDocumentUrls()));
         }
-        return PlacementDtoMapper.toCompanyResponse(companyRepo.save(e));
+        if (req.getContactSupports() != null) {
+            applyContactSupports(e, req.getContactSupports());
+        }
+        CompanyProfile saved = companyRepo.save(e);
+        saved.getContactSupports().size();
+        return PlacementDtoMapper.toCompanyResponse(saved);
     }
 
     @Transactional(readOnly = true)
     public CompanyResponse get(Long id) {
-        return companyRepo.findById(id).map(PlacementDtoMapper::toCompanyResponse)
+        CompanyProfile e = companyRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
+        e.getContactSupports().size();
+        return PlacementDtoMapper.toCompanyResponse(e);
     }
 
     @Transactional(readOnly = true)
     public List<CompanyResponse> findAll() {
-        return companyRepo.findAll().stream().map(PlacementDtoMapper::toCompanyResponse).toList();
+        return companyRepo.findAll().stream().map(c -> {
+            c.getContactSupports().size();
+            return PlacementDtoMapper.toCompanyResponse(c);
+        }).toList();
     }
 
     @Transactional

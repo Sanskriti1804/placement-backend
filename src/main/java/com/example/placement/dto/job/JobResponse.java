@@ -1,0 +1,225 @@
+package com.example.placement.dto.job;
+
+import com.example.placement.dto.common.PlacementCoordinatorResponse;
+import com.example.placement.dto.company.CompanyResponse;
+import com.example.placement.dto.selection.SelectionRoundResponse;
+import com.example.placement.common.enums.JobResultStatus;
+import com.example.placement.common.enums.JobType;
+import com.example.placement.common.enums.WorkMode;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class JobResponse {
+
+    private Long id;
+    private Long companyId;
+    private CompanyResponse company;
+    private Long placementCoordinatorId;
+    private PlacementCoordinatorResponse placementCoordinator;
+    private JobType jobType;
+    private String internshipDuration;
+    private WorkMode workMode;
+    private BigDecimal ctcLpa;
+    private String additionalInfo;
+    private LocalDate lastDateToApply;
+    private LocalDateTime jobPostingTime;
+    private String venue;
+    private String jobDescription;
+    private String preparationGuide;
+    private String requirements;
+    private String responsibilities;
+    private String eligibility;
+    private JobResultStatus resultStatus;
+    private LocalDate resultDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private List<SelectionRoundResponse> selectionRounds = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public CompanyResponse getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyResponse company) {
+        this.company = company;
+    }
+
+    public Long getPlacementCoordinatorId() {
+        return placementCoordinatorId;
+    }
+
+    public void setPlacementCoordinatorId(Long placementCoordinatorId) {
+        this.placementCoordinatorId = placementCoordinatorId;
+    }
+
+    public PlacementCoordinatorResponse getPlacementCoordinator() {
+        return placementCoordinator;
+    }
+
+    public void setPlacementCoordinator(PlacementCoordinatorResponse placementCoordinator) {
+        this.placementCoordinator = placementCoordinator;
+    }
+
+    public JobType getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(JobType jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getInternshipDuration() {
+        return internshipDuration;
+    }
+
+    public void setInternshipDuration(String internshipDuration) {
+        this.internshipDuration = internshipDuration;
+    }
+
+    public WorkMode getWorkMode() {
+        return workMode;
+    }
+
+    public void setWorkMode(WorkMode workMode) {
+        this.workMode = workMode;
+    }
+
+    public BigDecimal getCtcLpa() {
+        return ctcLpa;
+    }
+
+    public void setCtcLpa(BigDecimal ctcLpa) {
+        this.ctcLpa = ctcLpa;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+    public LocalDate getLastDateToApply() {
+        return lastDateToApply;
+    }
+
+    public void setLastDateToApply(LocalDate lastDateToApply) {
+        this.lastDateToApply = lastDateToApply;
+    }
+
+    public LocalDateTime getJobPostingTime() {
+        return jobPostingTime;
+    }
+
+    public void setJobPostingTime(LocalDateTime jobPostingTime) {
+        this.jobPostingTime = jobPostingTime;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public String getJobDescription() {
+        return jobDescription;
+    }
+
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
+    }
+
+    public String getPreparationGuide() {
+        return preparationGuide;
+    }
+
+    public void setPreparationGuide(String preparationGuide) {
+        this.preparationGuide = preparationGuide;
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
+
+    public String getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(String responsibilities) {
+        this.responsibilities = responsibilities;
+    }
+
+    public String getEligibility() {
+        return eligibility;
+    }
+
+    public void setEligibility(String eligibility) {
+        this.eligibility = eligibility;
+    }
+
+    public JobResultStatus getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(JobResultStatus resultStatus) {
+        this.resultStatus = resultStatus;
+    }
+
+    public LocalDate getResultDate() {
+        return resultDate;
+    }
+
+    public void setResultDate(LocalDate resultDate) {
+        this.resultDate = resultDate;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<SelectionRoundResponse> getSelectionRounds() {
+        return selectionRounds;
+    }
+
+    public void setSelectionRounds(List<SelectionRoundResponse> selectionRounds) {
+        this.selectionRounds = selectionRounds;
+    }
+}

@@ -1,19 +1,22 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.StaffProfileCreateRequest;
-import com.example.placement.dto.placement.StaffProfileResponse;
-import com.example.placement.dto.placement.StaffProfileUpdateRequest;
-import com.example.placement.entity.*;
-import com.example.placement.entity.main.CompanyProfile;
-import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.dto.staff.StaffManagedRoleRequest;
+import com.example.placement.dto.staff.StaffProfileCreateRequest;
+import com.example.placement.dto.staff.StaffProfileResponse;
+import com.example.placement.dto.staff.StaffProfileUpdateRequest;
+import com.example.placement.dto.staff.StaffProfessionalExperienceRequest;
+import com.example.placement.entity.StaffManagedRole;
+import com.example.placement.entity.StaffProfessionalExperience;
 import com.example.placement.entity.main.StaffProfile;
-import com.example.placement.entity.main.StudentProfile;
-import com.example.placement.repository.*;
+import com.example.placement.entity.main.User;
+import com.example.placement.repository.StaffProfileRepo;
+import com.example.placement.repository.UserRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,25 +24,54 @@ public class StaffProfileCrudService {
 
     private final StaffProfileRepo staffProfileRepo;
     private final UserRepo userRepo;
-    private final CompanyRepo companyRepo;
-    private final DriveRepo driveRepo;
-    private final StudentProfileRepo studentProfileRepo;
-    private final DepartmentRepo departmentRepo;
 
-    public StaffProfileCrudService(
-            StaffProfileRepo staffProfileRepo,
-            UserRepo userRepo,
-            CompanyRepo companyRepo,
-            DriveRepo driveRepo,
-            StudentProfileRepo studentProfileRepo,
-            DepartmentRepo departmentRepo
-    ) {
+    public StaffProfileCrudService(StaffProfileRepo staffProfileRepo, UserRepo userRepo) {
         this.staffProfileRepo = staffProfileRepo;
         this.userRepo = userRepo;
-        this.companyRepo = companyRepo;
-        this.driveRepo = driveRepo;
-        this.studentProfileRepo = studentProfileRepo;
-        this.departmentRepo = departmentRepo;
+    }
+
+    private static void replaceManagedRoles(StaffProfile s, List<StaffManagedRoleRequest> reqs) {
+        if (reqs == null) {
+            return;
+        }
+        s.getManagedRoles().clear();
+        for (StaffManagedRoleRequest r : reqs) {
+            StaffManagedRole m = new StaffManagedRole();
+            m.setStaff(s);
+            if (r.getCompanyIds() != null) {
+                m.setCompanyIds(new ArrayList<>(r.getCompanyIds()));
+            }
+            if (r.getDriveIds() != null) {
+                m.setDriveIds(new ArrayList<>(r.getDriveIds()));
+            }
+            if (r.getStudentIds() != null) {
+                m.setStudentIds(new ArrayList<>(r.getStudentIds()));
+            }
+            if (r.getDepartments() != null) {
+                m.setDepartments(new ArrayList<>(r.getDepartments()));
+            }
+            s.getManagedRoles().add(m);
+        }
+    }
+
+    private static void replaceProfessionalExperiences(StaffProfile s, List<StaffProfessionalExperienceRequest> reqs) {
+        if (reqs == null) {
+            return;
+        }
+        s.getProfessionalExperiences().clear();
+        for (StaffProfessionalExperienceRequest r : reqs) {
+            if (r.getCompanyName() == null || r.getCompanyName().isBlank()) {
+                throw new IllegalArgumentException("Each professional experience requires companyName");
+            }
+            StaffProfessionalExperience e = new StaffProfessionalExperience();
+            e.setStaff(s);
+            e.setCompanyName(r.getCompanyName().trim());
+            e.setRoleTitle(r.getRoleTitle());
+            e.setFromDate(r.getFromDate());
+            e.setToDate(r.getToDate());
+            e.setDescription(r.getDescription());
+            s.getProfessionalExperiences().add(e);
+        }
     }
 
     @Transactional
@@ -58,10 +90,11 @@ public class StaffProfileCrudService {
         }
         StaffProfile s = new StaffProfile();
         s.setUser(user);
-        applyCreateScalars(s, req);
+        applyScalarsOnly(s, req);
         s = staffProfileRepo.save(s);
-        replaceAssignments(s, req.getAssignedCompanyIds(), req.getAssignedDriveIds(),
-                req.getAssignedStudentProfileIds(), req.getAssignedDepartmentIds());
+        replaceManagedRoles(s, req.getManagedRoles());
+        replaceProfessionalExperiences(s, req.getProfessionalExperiences());
+        staffProfileRepo.save(s);
         return PlacementDtoMapper.toStaffProfileResponse(reload(s.getId()));
     }
 
@@ -75,8 +108,14 @@ public class StaffProfileCrudService {
         if (req.getEmail() != null && !req.getEmail().isBlank()) {
             s.setEmail(req.getEmail().trim());
         }
+        if (req.getUserEmail() != null) {
+            s.setUserEmail(req.getUserEmail().trim());
+        }
         if (req.getPhoneNumber() != null) {
             s.setPhoneNumber(req.getPhoneNumber());
+        }
+        if (req.getLinkedin() != null) {
+            s.setLinkedin(req.getLinkedin());
         }
         if (req.getOfficeLocation() != null) {
             s.setOfficeLocation(req.getOfficeLocation());
@@ -84,113 +123,60 @@ public class StaffProfileCrudService {
         if (req.getCollegeName() != null) {
             s.setCollegeName(req.getCollegeName());
         }
-        if (req.getFacultyDuty() != null) {
-            s.setFacultyDuty(req.getFacultyDuty());
+        if (req.getJoiningYear() != null) {
+            s.setJoiningYear(req.getJoiningYear());
         }
-        if (req.getPlacementDuty() != null) {
-            s.setPlacementDuty(req.getPlacementDuty());
+        if (req.getJoiningMonth() != null) {
+            s.setJoiningMonth(req.getJoiningMonth());
         }
-        if (req.getCurrentRole() != null) {
-            s.setCurrentRole(req.getCurrentRole());
+        if (req.getEndingYear() != null) {
+            s.setEndingYear(req.getEndingYear());
         }
-        if (req.getPlacementResponsibilities() != null) {
-            s.setPlacementResponsibilities(req.getPlacementResponsibilities());
+        if (req.getEndingMonth() != null) {
+            s.setEndingMonth(req.getEndingMonth());
         }
-        if (req.getQualification() != null) {
-            s.setQualification(req.getQualification());
+        if (req.getSubjects() != null) {
+            s.setSubjects(new ArrayList<>(req.getSubjects()));
         }
-        if (req.getExperience() != null) {
-            s.setExperience(req.getExperience());
+        if (req.getQualifications() != null) {
+            s.setQualifications(new ArrayList<>(req.getQualifications()));
         }
-        if (req.getSubjectsTaught() != null) {
-            s.setSubjectsTaught(req.getSubjectsTaught());
+        if (req.getManagedRoles() != null) {
+            replaceManagedRoles(s, req.getManagedRoles());
         }
-        if (req.getStartDate() != null) {
-            s.setStartDate(req.getStartDate());
-        }
-        if (req.getEndDate() != null) {
-            s.setEndDate(req.getEndDate());
+        if (req.getProfessionalExperiences() != null) {
+            replaceProfessionalExperiences(s, req.getProfessionalExperiences());
         }
         return PlacementDtoMapper.toStaffProfileResponse(reload(staffProfileRepo.save(s).getId()));
     }
 
-    private void applyCreateScalars(StaffProfile s, StaffProfileCreateRequest req) {
+    private void applyScalarsOnly(StaffProfile s, StaffProfileCreateRequest req) {
         s.setName(req.getName().trim());
         s.setEmail(req.getEmail().trim());
+        s.setUserEmail(req.getUserEmail() != null ? req.getUserEmail().trim() : null);
         s.setPhoneNumber(req.getPhoneNumber());
+        s.setLinkedin(req.getLinkedin());
         s.setOfficeLocation(req.getOfficeLocation());
         s.setCollegeName(req.getCollegeName());
-        s.setFacultyDuty(req.getFacultyDuty());
-        s.setPlacementDuty(req.getPlacementDuty());
-        s.setCurrentRole(req.getCurrentRole());
-        s.setPlacementResponsibilities(req.getPlacementResponsibilities());
-        s.setQualification(req.getQualification());
-        s.setExperience(req.getExperience());
-        s.setSubjectsTaught(req.getSubjectsTaught());
-        s.setStartDate(req.getStartDate());
-        s.setEndDate(req.getEndDate());
-    }
-
-    private void replaceAssignments(
-            StaffProfile s,
-            List<Long> companyIds,
-            List<Long> driveIds,
-            List<Long> studentIds,
-            List<Long> departmentIds
-    ) {
-        if (companyIds != null) {
-            s.getCompanyAssignments().clear();
-            for (Long cid : companyIds) {
-                CompanyProfile c = companyRepo.findById(cid)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
-                StaffCompanyAssignment a = new StaffCompanyAssignment();
-                a.setStaff(s);
-                a.setCompany(c);
-                s.getCompanyAssignments().add(a);
-            }
+        s.setJoiningYear(req.getJoiningYear());
+        s.setJoiningMonth(req.getJoiningMonth());
+        s.setEndingYear(req.getEndingYear());
+        s.setEndingMonth(req.getEndingMonth());
+        if (req.getSubjects() != null) {
+            s.setSubjects(new ArrayList<>(req.getSubjects()));
         }
-        if (driveIds != null) {
-            s.getDriveAssignments().clear();
-            for (Long did : driveIds) {
-                DriveProfile d = driveRepo.findById(did)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
-                StaffDriveAssignment a = new StaffDriveAssignment();
-                a.setStaff(s);
-                a.setDrive(d);
-                s.getDriveAssignments().add(a);
-            }
-        }
-        if (studentIds != null) {
-            s.getStudentAssignments().clear();
-            for (Long sid : studentIds) {
-                StudentProfile st = studentProfileRepo.findById(sid)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student profile not found"));
-                StaffStudentAssignment a = new StaffStudentAssignment();
-                a.setStaff(s);
-                a.setStudent(st);
-                s.getStudentAssignments().add(a);
-            }
-        }
-        if (departmentIds != null) {
-            s.getDepartmentAssignments().clear();
-            for (Long depId : departmentIds) {
-                Department d = departmentRepo.findById(depId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Department not found"));
-                StaffDepartmentAssignment a = new StaffDepartmentAssignment();
-                a.setStaff(s);
-                a.setDepartment(d);
-                s.getDepartmentAssignments().add(a);
-            }
+        if (req.getQualifications() != null) {
+            s.setQualifications(new ArrayList<>(req.getQualifications()));
         }
     }
 
     private StaffProfile reload(Long id) {
         StaffProfile s = staffProfileRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff profile not found"));
-        s.getCompanyAssignments().size();
-        s.getDriveAssignments().size();
-        s.getStudentAssignments().size();
-        s.getDepartmentAssignments().size();
+        s.getManagedRoles().size();
+        s.getProfessionalExperiences().size();
+        s.getSubjects().size();
+        s.getQualifications().size();
         return s;
     }
 
@@ -201,7 +187,9 @@ public class StaffProfileCrudService {
 
     @Transactional(readOnly = true)
     public List<StaffProfileResponse> findAll() {
-        return staffProfileRepo.findAll().stream().map(sp -> PlacementDtoMapper.toStaffProfileResponse(reload(sp.getId()))).toList();
+        return staffProfileRepo.findAll().stream()
+                .map(sp -> PlacementDtoMapper.toStaffProfileResponse(reload(sp.getId())))
+                .toList();
     }
 
     @Transactional

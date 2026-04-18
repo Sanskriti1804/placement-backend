@@ -1,8 +1,8 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.placement.DriveBranchCreateRequest;
-import com.example.placement.dto.placement.DriveBranchResponse;
-import com.example.placement.dto.placement.DriveBranchUpdateRequest;
+import com.example.placement.dto.drive.DriveBranchCreateRequest;
+import com.example.placement.dto.drive.DriveBranchResponse;
+import com.example.placement.dto.drive.DriveBranchUpdateRequest;
 import com.example.placement.service.crud.DriveBranchCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

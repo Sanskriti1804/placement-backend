@@ -1,22 +1,21 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.JobCreateRequest;
-import com.example.placement.dto.placement.JobResponse;
-import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
-import com.example.placement.dto.placement.JobSelectionRoundResponse;
-import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
-import com.example.placement.dto.placement.JobUpdateRequest;
+import com.example.placement.common.entity.SelectionRound;
+import com.example.placement.dto.job.JobCreateRequest;
+import com.example.placement.dto.job.JobResponse;
+import com.example.placement.dto.selection.JobSelectionRoundCreateRequest;
+import com.example.placement.dto.selection.JobSelectionRoundUpdateRequest;
+import com.example.placement.dto.job.JobUpdateRequest;
+import com.example.placement.dto.selection.SelectionRoundResponse;
 import com.example.placement.entity.main.CompanyProfile;
 import com.example.placement.entity.main.JobProfile;
-import com.example.placement.entity.types.JobResultStatus;
-import com.example.placement.entity.JobSelectionRound;
-import com.example.placement.entity.types.JobType;
-import com.example.placement.entity.PlacementCoordinator;
-import com.example.placement.entity.RoundCompletionStatus;
+import com.example.placement.entity.main.StaffProfile;
+import com.example.placement.common.enums.JobResultStatus;
+import com.example.placement.common.enums.JobType;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.JobRepo;
-import com.example.placement.repository.JobSelectionRoundRepo;
-import com.example.placement.repository.PlacementCoordinatorRepo;
+import com.example.placement.repository.SelectionRoundRepo;
+import com.example.placement.repository.StaffProfileRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,19 +28,19 @@ public class JobCrudService {
 
     private final JobRepo jobRepo;
     private final CompanyRepo companyRepo;
-    private final PlacementCoordinatorRepo coordinatorRepo;
-    private final JobSelectionRoundRepo jobSelectionRoundRepo;
+    private final StaffProfileRepo staffProfileRepo;
+    private final SelectionRoundRepo selectionRoundRepo;
 
     public JobCrudService(
             JobRepo jobRepo,
             CompanyRepo companyRepo,
-            PlacementCoordinatorRepo coordinatorRepo,
-            JobSelectionRoundRepo jobSelectionRoundRepo
+            StaffProfileRepo staffProfileRepo,
+            SelectionRoundRepo selectionRoundRepo
     ) {
         this.jobRepo = jobRepo;
         this.companyRepo = companyRepo;
-        this.coordinatorRepo = coordinatorRepo;
-        this.jobSelectionRoundRepo = jobSelectionRoundRepo;
+        this.staffProfileRepo = staffProfileRepo;
+        this.selectionRoundRepo = selectionRoundRepo;
     }
 
     private void validateInternshipFieldsOnCreate(JobType jobType, String internshipDuration) {
@@ -84,11 +83,11 @@ public class JobCrudService {
         validateInternshipFieldsOnCreate(req.getJobType(), req.getInternshipDuration());
         CompanyProfile company = companyRepo.findById(req.getCompanyId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
-        PlacementCoordinator pc = coordinatorRepo.findById(req.getPlacementCoordinatorId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordinator not found"));
+        StaffProfile coordinator = staffProfileRepo.findById(req.getPlacementCoordinatorId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff coordinator not found"));
         JobProfile job = new JobProfile();
         job.setCompany(company);
-        job.setPlacementCoordinator(pc);
+        job.setPlacementCoordinator(coordinator);
         job.setJobType(req.getJobType());
         job.setInternshipDuration(req.getInternshipDuration());
         job.setWorkMode(req.getWorkMode());
@@ -112,12 +111,11 @@ public class JobCrudService {
                 if (rc.getRoundName() == null || rc.getRoundName().isBlank() || rc.getSequenceOrder() == null) {
                     throw new IllegalArgumentException("Each round requires roundName and sequenceOrder");
                 }
-                JobSelectionRound jr = new JobSelectionRound();
+                SelectionRound jr = new SelectionRound();
                 jr.setJob(saved);
                 jr.setRoundName(rc.getRoundName().trim());
-                jr.setSequenceOrder(rc.getSequenceOrder());
+                jr.setSequenceNumber(rc.getSequenceOrder());
                 jr.setScheduledDate(rc.getScheduledDate());
-                jr.setCompletionStatus(rc.getCompletionStatus() != null ? rc.getCompletionStatus() : RoundCompletionStatus.PENDING);
                 saved.getSelectionRounds().add(jr);
             }
             saved = jobRepo.save(saved);
@@ -135,9 +133,9 @@ public class JobCrudService {
             job.setCompany(company);
         }
         if (req.getPlacementCoordinatorId() != null) {
-            PlacementCoordinator pc = coordinatorRepo.findById(req.getPlacementCoordinatorId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordinator not found"));
-            job.setPlacementCoordinator(pc);
+            StaffProfile coordinator = staffProfileRepo.findById(req.getPlacementCoordinatorId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff coordinator not found"));
+            job.setPlacementCoordinator(coordinator);
         }
         if (req.getJobType() != null) {
             job.setJobType(req.getJobType());
@@ -190,12 +188,11 @@ public class JobCrudService {
                 if (ur.getRoundName() == null || ur.getRoundName().isBlank() || ur.getSequenceOrder() == null) {
                     throw new IllegalArgumentException("Each round requires roundName and sequenceOrder");
                 }
-                JobSelectionRound jr = new JobSelectionRound();
+                SelectionRound jr = new SelectionRound();
                 jr.setJob(job);
                 jr.setRoundName(ur.getRoundName().trim());
-                jr.setSequenceOrder(ur.getSequenceOrder());
+                jr.setSequenceNumber(ur.getSequenceOrder());
                 jr.setScheduledDate(ur.getScheduledDate());
-                jr.setCompletionStatus(ur.getCompletionStatus() != null ? ur.getCompletionStatus() : RoundCompletionStatus.PENDING);
                 job.getSelectionRounds().add(jr);
             }
         }
@@ -221,12 +218,12 @@ public class JobCrudService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobSelectionRoundResponse> listSelectionRoundsForJob(Long jobId) {
+    public List<SelectionRoundResponse> listSelectionRoundsForJob(Long jobId) {
         if (!jobRepo.existsById(jobId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found");
         }
-        return jobSelectionRoundRepo.findByJob_IdOrderBySequenceOrderAsc(jobId).stream()
-                .map(PlacementDtoMapper::toRoundResponse)
+        return selectionRoundRepo.findByJob_IdOrderBySequenceNumberAsc(jobId).stream()
+                .map(PlacementDtoMapper::toSelectionRoundResponse)
                 .toList();
     }
 

@@ -1,8 +1,8 @@
 package com.example.placement.controller;
 
-import com.example.placement.dto.AuthRequest;
-import com.example.placement.dto.AuthResponse;
-import com.example.placement.dto.RegisterRequest;
+import com.example.placement.dto.auth.AuthRequest;
+import com.example.placement.dto.auth.AuthResponse;
+import com.example.placement.dto.auth.RegisterRequest;
 import com.example.placement.service.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

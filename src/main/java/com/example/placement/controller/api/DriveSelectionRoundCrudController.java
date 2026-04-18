@@ -1,8 +1,8 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.placement.DriveSelectionRoundResponse;
-import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
-import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
+import com.example.placement.dto.selection.SelectionRoundResponse;
+import com.example.placement.dto.selection.JobSelectionRoundCreateRequest;
+import com.example.placement.dto.selection.JobSelectionRoundUpdateRequest;
 import com.example.placement.service.crud.DriveSelectionRoundCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class DriveSelectionRoundCrudController {
     }
 
     @PostMapping
-    public ResponseEntity<DriveSelectionRoundResponse> create(
+    public ResponseEntity<SelectionRoundResponse> create(
             @RequestParam Long driveId,
             @RequestBody JobSelectionRoundCreateRequest request
     ) {
@@ -29,17 +29,17 @@ public class DriveSelectionRoundCrudController {
     }
 
     @GetMapping("/{id}")
-    public DriveSelectionRoundResponse get(@PathVariable Long id) {
+    public SelectionRoundResponse get(@PathVariable Long id) {
         return driveSelectionRoundCrudService.get(id);
     }
 
     @GetMapping
-    public List<DriveSelectionRoundResponse> list() {
+    public List<SelectionRoundResponse> list() {
         return driveSelectionRoundCrudService.findAll();
     }
 
     @PutMapping("/{id}")
-    public DriveSelectionRoundResponse update(@PathVariable Long id, @RequestBody JobSelectionRoundUpdateRequest request) {
+    public SelectionRoundResponse update(@PathVariable Long id, @RequestBody JobSelectionRoundUpdateRequest request) {
         return driveSelectionRoundCrudService.update(id, request);
     }
 

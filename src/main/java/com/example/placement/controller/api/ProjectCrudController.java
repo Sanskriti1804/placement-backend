@@ -1,6 +1,6 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.ProjectRequest;
+import com.example.placement.dto.student.ProjectRequest;
 import com.example.placement.entity.Project;
 import com.example.placement.service.crud.ProjectCrudService;
 import org.springframework.http.HttpStatus;

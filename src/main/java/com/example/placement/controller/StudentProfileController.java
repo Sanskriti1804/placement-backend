@@ -1,8 +1,8 @@
 package com.example.placement.controller;
 
-import com.example.placement.dto.PlatformLinkRequest;
-import com.example.placement.dto.ProjectRequest;
-import com.example.placement.dto.StudentProfileRequest;
+import com.example.placement.dto.student.PlatformLinkRequest;
+import com.example.placement.dto.student.ProjectRequest;
+import com.example.placement.dto.student.StudentProfileRequest;
 import com.example.placement.entity.Platform;
 import com.example.placement.entity.Project;
 import com.example.placement.entity.Skill;

@@ -1,7 +1,7 @@
 package com.example.placement.entity;
 
 import com.example.placement.entity.main.StudentProfile;
-import com.example.placement.entity.types.PlatformType;
+import com.example.placement.common.enums.PlatformType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

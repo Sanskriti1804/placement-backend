@@ -1,8 +1,8 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.DriveBranchCreateRequest;
-import com.example.placement.dto.placement.DriveBranchResponse;
-import com.example.placement.dto.placement.DriveBranchUpdateRequest;
+import com.example.placement.dto.drive.DriveBranchCreateRequest;
+import com.example.placement.dto.drive.DriveBranchResponse;
+import com.example.placement.dto.drive.DriveBranchUpdateRequest;
 import com.example.placement.entity.main.DriveProfile;
 import com.example.placement.entity.DriveBranch;
 import com.example.placement.repository.DriveBranchRepo;

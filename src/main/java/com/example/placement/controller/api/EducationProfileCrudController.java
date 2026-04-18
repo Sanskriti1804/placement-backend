@@ -1,7 +1,7 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.EducationProfileRequest;
-import com.example.placement.entity.EducationProfile;
+import com.example.placement.dto.student.EducationProfileRequest;
+import com.example.placement.entity.Education;
 import com.example.placement.service.crud.EducationProfileCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,22 +20,22 @@ public class EducationProfileCrudController {
     }
 
     @PostMapping
-    public ResponseEntity<EducationProfile> create(@RequestBody EducationProfileRequest request) {
+    public ResponseEntity<Education> create(@RequestBody EducationProfileRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(educationProfileCrudService.create(request));
     }
 
     @GetMapping("/{id}")
-    public EducationProfile get(@PathVariable Long id) {
+    public Education get(@PathVariable Long id) {
         return educationProfileCrudService.get(id);
     }
 
     @GetMapping
-    public List<EducationProfile> list() {
+    public List<Education> list() {
         return educationProfileCrudService.findAll();
     }
 
     @PutMapping("/{id}")
-    public EducationProfile update(@PathVariable Long id, @RequestBody EducationProfileRequest request) {
+    public Education update(@PathVariable Long id, @RequestBody EducationProfileRequest request) {
         return educationProfileCrudService.update(id, request);
     }
 

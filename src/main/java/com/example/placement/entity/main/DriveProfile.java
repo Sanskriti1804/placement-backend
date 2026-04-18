@@ -1,7 +1,9 @@
 package com.example.placement.entity.main;
 
-import com.example.placement.entity.*;
-import com.example.placement.entity.types.JobResultStatus;
+import com.example.placement.common.entity.SelectionRound;
+import com.example.placement.common.enums.JobResultStatus;
+import com.example.placement.entity.DriveBranch;
+import com.example.placement.entity.DriveOfferedRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -15,7 +17,7 @@ import java.util.List;
         name = "drives",
         indexes = {
                 @Index(name = "idx_drive_company_id", columnList = "company_id"),
-                @Index(name = "idx_drive_coordinator_id", columnList = "placement_coordinator_id"),
+                @Index(name = "idx_drive_coordinator_staff_id", columnList = "placement_coordinator_staff_id"),
                 @Index(name = "idx_drive_reg_deadline", columnList = "registration_deadline")
         }
 )
@@ -34,7 +36,7 @@ public class DriveProfile {
     private CompanyProfile company;
 
     @Column(name = "registration_deadline", nullable = false)
-    private LocalDateTime registrationDeadline;
+    private LocalDateTime lastDateToApply;
 
     @Column(name = "drive_date_time")
     private LocalDateTime driveDateTime;
@@ -50,9 +52,9 @@ public class DriveProfile {
     private LocalDate resultDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "placement_coordinator_id")
+    @JoinColumn(name = "placement_coordinator_staff_id")
     @JsonIgnore
-    private PlacementCoordinator placementCoordinator;
+    private StaffProfile placementCoordinator;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -67,7 +69,7 @@ public class DriveProfile {
     private List<DriveOfferedRole> offeredRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DriveSelectionRound> selectionRounds = new ArrayList<>();
+    private List<SelectionRound> selectionRounds = new ArrayList<>();
 
     @PrePersist
     void onCreate() {
@@ -107,12 +109,12 @@ public class DriveProfile {
         this.company = company;
     }
 
-    public LocalDateTime getRegistrationDeadline() {
-        return registrationDeadline;
+    public LocalDateTime getLastDateToApply() {
+        return lastDateToApply;
     }
 
-    public void setRegistrationDeadline(LocalDateTime registrationDeadline) {
-        this.registrationDeadline = registrationDeadline;
+    public void setLastDateToApply(LocalDateTime lastDateToApply) {
+        this.lastDateToApply = lastDateToApply;
     }
 
     public LocalDateTime getDriveDateTime() {
@@ -147,11 +149,11 @@ public class DriveProfile {
         this.resultDate = resultDate;
     }
 
-    public PlacementCoordinator getPlacementCoordinator() {
+    public StaffProfile getPlacementCoordinator() {
         return placementCoordinator;
     }
 
-    public void setPlacementCoordinator(PlacementCoordinator placementCoordinator) {
+    public void setPlacementCoordinator(StaffProfile placementCoordinator) {
         this.placementCoordinator = placementCoordinator;
     }
 
@@ -187,11 +189,11 @@ public class DriveProfile {
         this.offeredRoles = offeredRoles;
     }
 
-    public List<DriveSelectionRound> getSelectionRounds() {
+    public List<SelectionRound> getSelectionRounds() {
         return selectionRounds;
     }
 
-    public void setSelectionRounds(List<DriveSelectionRound> selectionRounds) {
+    public void setSelectionRounds(List<SelectionRound> selectionRounds) {
         this.selectionRounds = selectionRounds;
     }
 }

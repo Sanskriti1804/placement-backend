@@ -1,9 +1,9 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.BackLogRequest;
-import com.example.placement.dto.EducationProfileRequest;
+import com.example.placement.dto.student.BackLogRequest;
+import com.example.placement.dto.student.EducationProfileRequest;
 import com.example.placement.entity.Backlog;
-import com.example.placement.entity.EducationProfile;
+import com.example.placement.entity.Education;
 import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.BackLogRepo;
 import com.example.placement.repository.EducationalProfileRepo;
@@ -33,7 +33,7 @@ public class EducationProfileCrudService {
     }
 
     @Transactional
-    public EducationProfile create(EducationProfileRequest req) {
+    public Education create(EducationProfileRequest req) {
         if (req.getStudentId() == null) {
             throw new IllegalArgumentException("studentId is required");
         }
@@ -45,7 +45,7 @@ public class EducationProfileCrudService {
         }
         StudentProfile student = studentProfileRepo.findById(req.getStudentId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student profile not found"));
-        EducationProfile profile = new EducationProfile();
+        Education profile = new Education();
         profile.setStudent(student);
         applyScalars(profile, req);
         if (req.getBacklogs() != null) {
@@ -61,8 +61,8 @@ public class EducationProfileCrudService {
     }
 
     @Transactional
-    public EducationProfile update(Long id, EducationProfileRequest req) {
-        EducationProfile profile = educationRepo.findById(id)
+    public Education update(Long id, EducationProfileRequest req) {
+        Education profile = educationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Education profile not found"));
         if (req.getUniversity() != null) {
             profile.setUniversity(req.getUniversity());
@@ -116,12 +116,12 @@ public class EducationProfileCrudService {
                 profile.getBacklogs().add(b);
             }
         }
-        EducationProfile saved = educationRepo.save(profile);
+        Education saved = educationRepo.save(profile);
         saved.setBacklogs(backLogRepo.findByEducationProfile_Id(saved.getId()));
         return saved;
     }
 
-    private void applyScalars(EducationProfile profile, EducationProfileRequest req) {
+    private void applyScalars(Education profile, EducationProfileRequest req) {
         profile.setUniversity(req.getUniversity());
         profile.setBranch(req.getBranch());
         profile.setCourse(req.getCourse());
@@ -139,17 +139,17 @@ public class EducationProfileCrudService {
     }
 
     @Transactional(readOnly = true)
-    public EducationProfile get(Long id) {
-        EducationProfile profile = educationRepo.findById(id)
+    public Education get(Long id) {
+        Education profile = educationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Education profile not found"));
         profile.setBacklogs(backLogRepo.findByEducationProfile_Id(profile.getId()));
         return profile;
     }
 
     @Transactional(readOnly = true)
-    public List<EducationProfile> findAll() {
-        List<EducationProfile> all = educationRepo.findAll();
-        for (EducationProfile p : all) {
+    public List<Education> findAll() {
+        List<Education> all = educationRepo.findAll();
+        for (Education p : all) {
             p.setBacklogs(backLogRepo.findByEducationProfile_Id(p.getId()));
         }
         return all;

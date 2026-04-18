@@ -1,20 +1,22 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.DriveCreateRequest;
-import com.example.placement.entity.types.BranchType;
-import com.example.placement.entity.types.JobResultStatus;
+import com.example.placement.dto.drive.DriveCreateRequest;
+import com.example.placement.common.enums.BranchType;
+import com.example.placement.common.enums.JobResultStatus;
 import com.example.placement.entity.main.CompanyProfile;
-import com.example.placement.entity.PlacementCoordinator;
+import com.example.placement.entity.main.StaffProfile;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.DriveRepo;
-import com.example.placement.repository.DriveSelectionRoundRepo;
-import com.example.placement.repository.PlacementCoordinatorRepo;
+import com.example.placement.repository.SelectionRoundRepo;
+import com.example.placement.repository.StaffProfileRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class DriveCrudServiceTest {
 
     @Mock
@@ -33,9 +36,9 @@ class DriveCrudServiceTest {
     @Mock
     private CompanyRepo companyRepo;
     @Mock
-    private PlacementCoordinatorRepo coordinatorRepo;
+    private StaffProfileRepo staffProfileRepo;
     @Mock
-    private DriveSelectionRoundRepo driveSelectionRoundRepo;
+    private SelectionRoundRepo selectionRoundRepo;
 
     @InjectMocks
     private DriveCrudService driveCrudService;
@@ -44,7 +47,7 @@ class DriveCrudServiceTest {
         DriveCreateRequest r = new DriveCreateRequest();
         r.setDriveName("Winter placements");
         r.setCompanyId(1L);
-        r.setRegistrationDeadline(LocalDateTime.now().plusDays(14));
+        r.setLastDateToApply(LocalDateTime.now().plusDays(14));
         r.setPlacementCoordinatorId(1L);
         return r;
     }
@@ -52,7 +55,7 @@ class DriveCrudServiceTest {
     @BeforeEach
     void stubs() {
         when(companyRepo.findById(1L)).thenReturn(Optional.of(new CompanyProfile()));
-        when(coordinatorRepo.findById(1L)).thenReturn(Optional.of(new PlacementCoordinator()));
+        when(staffProfileRepo.findById(1L)).thenReturn(Optional.of(new StaffProfile()));
         when(driveRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
     }
 

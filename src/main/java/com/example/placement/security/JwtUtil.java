@@ -1,6 +1,6 @@
 package com.example.placement.security;
 
-import com.example.placement.entity.User;
+import com.example.placement.entity.main.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

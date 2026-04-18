@@ -1,8 +1,8 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.BackLogRequest;
+import com.example.placement.dto.student.BackLogRequest;
 import com.example.placement.entity.Backlog;
-import com.example.placement.entity.EducationProfile;
+import com.example.placement.entity.Education;
 import com.example.placement.repository.BackLogRepo;
 import com.example.placement.repository.EducationalProfileRepo;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class BacklogCrudService {
         if (educationProfileId == null) {
             throw new IllegalArgumentException("educationProfileId is required");
         }
-        EducationProfile profile = educationRepo.findById(educationProfileId)
+        Education profile = educationRepo.findById(educationProfileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Education profile not found"));
         Backlog b = new Backlog();
         b.setEducationProfile(profile);

@@ -1,6 +1,6 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.PlatformLinkRequest;
+import com.example.placement.dto.student.PlatformLinkRequest;
 import com.example.placement.entity.Platform;
 import com.example.placement.service.crud.PlatformCrudService;
 import org.springframework.http.HttpStatus;

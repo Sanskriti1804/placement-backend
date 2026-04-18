@@ -1,0 +1,29 @@
+package com.example.placement.dto.student;
+
+import com.example.placement.common.enums.PlatformType;
+
+public class PlatformLinkRequest {
+    private PlatformType type;
+    private String url;
+
+    // Getter and Setter for type
+    public PlatformType getType() {
+        return type;
+    }
+
+    public void setType(PlatformType type) {
+        this.type = type;
+    }
+
+    // Getter and Setter for url
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+}
+
+
+

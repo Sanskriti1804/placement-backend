@@ -1,24 +1,23 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.DriveCreateRequest;
-import com.example.placement.dto.placement.DriveResponse;
-import com.example.placement.dto.placement.DriveSelectionRoundResponse;
-import com.example.placement.dto.placement.DriveUpdateRequest;
-import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
-import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
-import com.example.placement.entity.types.BranchType;
-import com.example.placement.entity.types.JobResultStatus;
-import com.example.placement.entity.main.CompanyProfile;
-import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.common.entity.SelectionRound;
+import com.example.placement.dto.drive.DriveCreateRequest;
+import com.example.placement.dto.drive.DriveResponse;
+import com.example.placement.dto.drive.DriveUpdateRequest;
+import com.example.placement.dto.selection.JobSelectionRoundCreateRequest;
+import com.example.placement.dto.selection.JobSelectionRoundUpdateRequest;
+import com.example.placement.dto.selection.SelectionRoundResponse;
+import com.example.placement.common.enums.BranchType;
+import com.example.placement.common.enums.JobResultStatus;
 import com.example.placement.entity.DriveBranch;
 import com.example.placement.entity.DriveOfferedRole;
-import com.example.placement.entity.DriveSelectionRound;
-import com.example.placement.entity.PlacementCoordinator;
-import com.example.placement.entity.RoundCompletionStatus;
+import com.example.placement.entity.main.CompanyProfile;
+import com.example.placement.entity.main.DriveProfile;
+import com.example.placement.entity.main.StaffProfile;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.DriveRepo;
-import com.example.placement.repository.DriveSelectionRoundRepo;
-import com.example.placement.repository.PlacementCoordinatorRepo;
+import com.example.placement.repository.SelectionRoundRepo;
+import com.example.placement.repository.StaffProfileRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,19 +34,19 @@ public class DriveCrudService {
 
     private final DriveRepo driveRepo;
     private final CompanyRepo companyRepo;
-    private final PlacementCoordinatorRepo coordinatorRepo;
-    private final DriveSelectionRoundRepo driveSelectionRoundRepo;
+    private final StaffProfileRepo staffProfileRepo;
+    private final SelectionRoundRepo selectionRoundRepo;
 
     public DriveCrudService(
             DriveRepo driveRepo,
             CompanyRepo companyRepo,
-            PlacementCoordinatorRepo coordinatorRepo,
-            DriveSelectionRoundRepo driveSelectionRoundRepo
+            StaffProfileRepo staffProfileRepo,
+            SelectionRoundRepo selectionRoundRepo
     ) {
         this.driveRepo = driveRepo;
         this.companyRepo = companyRepo;
-        this.coordinatorRepo = coordinatorRepo;
-        this.driveSelectionRoundRepo = driveSelectionRoundRepo;
+        this.staffProfileRepo = staffProfileRepo;
+        this.selectionRoundRepo = selectionRoundRepo;
     }
 
     private static long distinctBranchCount(List<BranchType> allowedBranches) {
@@ -98,8 +97,8 @@ public class DriveCrudService {
     @Transactional
     public DriveResponse create(DriveCreateRequest req) {
         if (req.getDriveName() == null || req.getDriveName().isBlank()
-                || req.getCompanyId() == null || req.getRegistrationDeadline() == null) {
-            throw new IllegalArgumentException("driveName, companyId, and registrationDeadline are required");
+                || req.getCompanyId() == null || req.getLastDateToApply() == null) {
+            throw new IllegalArgumentException("driveName, companyId, and lastDateToApply are required");
         }
         if (req.getPlacementCoordinatorId() == null) {
             throw new IllegalArgumentException("placementCoordinatorId is required");
@@ -107,17 +106,17 @@ public class DriveCrudService {
         validateBranchesAndRoles(req.getAllowedBranches(), req.getOfferedRoleTitles());
         CompanyProfile company = companyRepo.findById(req.getCompanyId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
-        PlacementCoordinator pc = coordinatorRepo.findById(req.getPlacementCoordinatorId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordinator not found"));
+        StaffProfile coordinator = staffProfileRepo.findById(req.getPlacementCoordinatorId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff coordinator not found"));
         DriveProfile d = new DriveProfile();
         d.setDriveName(req.getDriveName().trim());
         d.setCompany(company);
-        d.setRegistrationDeadline(req.getRegistrationDeadline());
+        d.setLastDateToApply(req.getLastDateToApply());
         d.setDriveDateTime(req.getDriveDateTime());
         d.setVenue(req.getVenue());
         d.setResultStatus(req.getResultStatus() != null ? req.getResultStatus() : JobResultStatus.NOT_ANNOUNCED);
         d.setResultDate(req.getResultDate());
-        d.setPlacementCoordinator(pc);
+        d.setPlacementCoordinator(coordinator);
         normalizeResultFields(d);
         validateResultFields(d);
         DriveProfile saved = driveRepo.save(d);
@@ -139,7 +138,7 @@ public class DriveCrudService {
                 }
                 DriveOfferedRole dr = new DriveOfferedRole();
                 dr.setDrive(saved);
-                dr.setRoleTitle(title.trim());
+                dr.setRoleName(title.trim());
                 saved.getOfferedRoles().add(dr);
             }
         }
@@ -148,12 +147,11 @@ public class DriveCrudService {
                 if (rc.getRoundName() == null || rc.getRoundName().isBlank() || rc.getSequenceOrder() == null) {
                     throw new IllegalArgumentException("Each selection round requires roundName and sequenceOrder");
                 }
-                DriveSelectionRound sr = new DriveSelectionRound();
+                SelectionRound sr = new SelectionRound();
                 sr.setDrive(saved);
                 sr.setRoundName(rc.getRoundName().trim());
-                sr.setSequenceOrder(rc.getSequenceOrder());
+                sr.setSequenceNumber(rc.getSequenceOrder());
                 sr.setScheduledDate(rc.getScheduledDate());
-                sr.setCompletionStatus(rc.getCompletionStatus() != null ? rc.getCompletionStatus() : RoundCompletionStatus.PENDING);
                 saved.getSelectionRounds().add(sr);
             }
         }
@@ -174,7 +172,7 @@ public class DriveCrudService {
                             .map(DriveBranch::getBranch)
                             .toList(),
                     req.getOfferedRoleTitles() != null ? req.getOfferedRoleTitles() : d.getOfferedRoles().stream()
-                            .map(DriveOfferedRole::getRoleTitle)
+                            .map(DriveOfferedRole::getRoleName)
                             .toList()
             );
         }
@@ -186,8 +184,8 @@ public class DriveCrudService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
             d.setCompany(company);
         }
-        if (req.getRegistrationDeadline() != null) {
-            d.setRegistrationDeadline(req.getRegistrationDeadline());
+        if (req.getLastDateToApply() != null) {
+            d.setLastDateToApply(req.getLastDateToApply());
         }
         if (req.getDriveDateTime() != null) {
             d.setDriveDateTime(req.getDriveDateTime());
@@ -202,9 +200,9 @@ public class DriveCrudService {
             d.setResultDate(req.getResultDate());
         }
         if (req.getPlacementCoordinatorId() != null) {
-            PlacementCoordinator pc = coordinatorRepo.findById(req.getPlacementCoordinatorId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coordinator not found"));
-            d.setPlacementCoordinator(pc);
+            StaffProfile coordinator = staffProfileRepo.findById(req.getPlacementCoordinatorId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Staff coordinator not found"));
+            d.setPlacementCoordinator(coordinator);
         }
         if (req.getAllowedBranches() != null) {
             d.getAllowedBranches().clear();
@@ -226,7 +224,7 @@ public class DriveCrudService {
                 }
                 DriveOfferedRole dr = new DriveOfferedRole();
                 dr.setDrive(d);
-                dr.setRoleTitle(title.trim());
+                dr.setRoleName(title.trim());
                 d.getOfferedRoles().add(dr);
             }
         }
@@ -236,12 +234,11 @@ public class DriveCrudService {
                 if (ur.getRoundName() == null || ur.getRoundName().isBlank() || ur.getSequenceOrder() == null) {
                     throw new IllegalArgumentException("Each selection round requires roundName and sequenceOrder");
                 }
-                DriveSelectionRound sr = new DriveSelectionRound();
+                SelectionRound sr = new SelectionRound();
                 sr.setDrive(d);
                 sr.setRoundName(ur.getRoundName().trim());
-                sr.setSequenceOrder(ur.getSequenceOrder());
+                sr.setSequenceNumber(ur.getSequenceOrder());
                 sr.setScheduledDate(ur.getScheduledDate());
-                sr.setCompletionStatus(ur.getCompletionStatus() != null ? ur.getCompletionStatus() : RoundCompletionStatus.PENDING);
                 d.getSelectionRounds().add(sr);
             }
         }
@@ -275,12 +272,12 @@ public class DriveCrudService {
     }
 
     @Transactional(readOnly = true)
-    public List<DriveSelectionRoundResponse> listSelectionRoundsForDrive(Long driveId) {
+    public List<SelectionRoundResponse> listSelectionRoundsForDrive(Long driveId) {
         if (!driveRepo.existsById(driveId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found");
         }
-        return driveSelectionRoundRepo.findByDrive_IdOrderBySequenceOrderAsc(driveId).stream()
-                .map(PlacementDtoMapper::toDriveSelectionRoundResponse)
+        return selectionRoundRepo.findByDrive_IdOrderBySequenceNumberAsc(driveId).stream()
+                .map(PlacementDtoMapper::toSelectionRoundResponse)
                 .toList();
     }
 

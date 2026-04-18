@@ -1,9 +1,9 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.StudentProfileRequest;
+import com.example.placement.dto.student.StudentProfileRequest;
 import com.example.placement.entity.Skill;
 import com.example.placement.entity.main.StudentProfile;
-import com.example.placement.entity.User;
+import com.example.placement.entity.main.User;
 import com.example.placement.repository.SkillsRepo;
 import com.example.placement.repository.StudentProfileRepo;
 import com.example.placement.repository.UserRepo;
@@ -75,6 +75,8 @@ public class StudentProfileCrudService {
 
     private void applyRequest(StudentProfile profile, StudentProfileRequest req) {
         profile.setName(req.getName());
+        profile.setUsername(req.getUsername());
+        profile.setUserEmail(req.getUserEmail());
         profile.setDomainRole(req.getDomainRole());
         profile.setPhoneNumber(req.getPhoneNumber());
         profile.setPhotoUrl(req.getPhotoUrl());
@@ -82,6 +84,12 @@ public class StudentProfileCrudService {
         profile.setAddressLine(req.getAddressLine());
         profile.setCity(req.getCity());
         profile.setState(req.getState());
+        profile.setPinCode(req.getPinCode());
+        profile.setResumeUrl(req.getResumeUrl());
+        if (req.getHired() != null) {
+            profile.setHired(req.getHired());
+        }
+        profile.setHiredCompanyName(req.getHiredCompanyName());
         profile.setDob(req.getDob());
     }
 

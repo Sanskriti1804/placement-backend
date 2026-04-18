@@ -13,7 +13,7 @@ public class Backlog {
     @ManyToOne(optional = false)
     @JoinColumn(name = "education_profile_id")
     @JsonIgnore
-    private EducationProfile educationProfile;
+    private Education educationProfile;
 
     private String subject;
     private Integer semester;
@@ -26,11 +26,11 @@ public class Backlog {
         this.id = id;
     }
 
-    public EducationProfile getEducationProfile() {
+    public Education getEducationProfile() {
         return educationProfile;
     }
 
-    public void setEducationProfile(EducationProfile educationProfile) {
+    public void setEducationProfile(Education educationProfile) {
         this.educationProfile = educationProfile;
     }
 

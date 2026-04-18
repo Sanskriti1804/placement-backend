@@ -1,8 +1,8 @@
 package com.example.placement.config;
 
-import com.example.placement.entity.types.BranchType;
-import com.example.placement.entity.types.CourseType;
-import com.example.placement.entity.types.DomainType;
+import com.example.placement.common.enums.BranchType;
+import com.example.placement.common.enums.CourseType;
+import com.example.placement.common.enums.DomainType;
 
 import java.util.*;
 

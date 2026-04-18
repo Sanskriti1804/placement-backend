@@ -1,8 +1,8 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.placement.StaffProfileCreateRequest;
-import com.example.placement.dto.placement.StaffProfileResponse;
-import com.example.placement.dto.placement.StaffProfileUpdateRequest;
+import com.example.placement.dto.staff.StaffProfileCreateRequest;
+import com.example.placement.dto.staff.StaffProfileResponse;
+import com.example.placement.dto.staff.StaffProfileUpdateRequest;
 import com.example.placement.service.crud.StaffProfileCrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

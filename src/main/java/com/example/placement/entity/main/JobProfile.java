@@ -1,10 +1,10 @@
 package com.example.placement.entity.main;
 
-import com.example.placement.entity.JobSelectionRound;
-import com.example.placement.entity.PlacementCoordinator;
-import com.example.placement.entity.WorkMode;
-import com.example.placement.entity.types.JobResultStatus;
-import com.example.placement.entity.types.JobType;
+import com.example.placement.common.entity.SelectionRound;
+import com.example.placement.entity.JobApplication;
+import com.example.placement.common.enums.WorkMode;
+import com.example.placement.common.enums.JobResultStatus;
+import com.example.placement.common.enums.JobType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -19,7 +19,7 @@ import java.util.List;
         name = "jobs",
         indexes = {
                 @Index(name = "idx_job_company_id", columnList = "company_id"),
-                @Index(name = "idx_job_coordinator_id", columnList = "placement_coordinator_id"),
+                @Index(name = "idx_job_coordinator_staff_id", columnList = "placement_coordinator_staff_id"),
                 @Index(name = "idx_job_last_apply", columnList = "last_date_to_apply"),
                 @Index(name = "idx_job_type", columnList = "job_type"),
                 @Index(name = "idx_job_work_mode", columnList = "work_mode")
@@ -85,9 +85,9 @@ public class JobProfile {
     private LocalDate resultDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "placement_coordinator_id")
+    @JoinColumn(name = "placement_coordinator_staff_id")
     @JsonIgnore
-    private PlacementCoordinator placementCoordinator;
+    private StaffProfile placementCoordinator;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -96,7 +96,11 @@ public class JobProfile {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobSelectionRound> selectionRounds = new ArrayList<>();
+    private List<SelectionRound> selectionRounds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<JobApplication> applications = new ArrayList<>();
 
     @PrePersist
     void onCreate() {
@@ -248,11 +252,11 @@ public class JobProfile {
         this.resultDate = resultDate;
     }
 
-    public PlacementCoordinator getPlacementCoordinator() {
+    public StaffProfile getPlacementCoordinator() {
         return placementCoordinator;
     }
 
-    public void setPlacementCoordinator(PlacementCoordinator placementCoordinator) {
+    public void setPlacementCoordinator(StaffProfile placementCoordinator) {
         this.placementCoordinator = placementCoordinator;
     }
 
@@ -272,11 +276,19 @@ public class JobProfile {
         this.updatedAt = updatedAt;
     }
 
-    public List<JobSelectionRound> getSelectionRounds() {
+    public List<SelectionRound> getSelectionRounds() {
         return selectionRounds;
     }
 
-    public void setSelectionRounds(List<JobSelectionRound> selectionRounds) {
+    public void setSelectionRounds(List<SelectionRound> selectionRounds) {
         this.selectionRounds = selectionRounds;
+    }
+
+    public List<JobApplication> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<JobApplication> applications) {
+        this.applications = applications;
     }
 }

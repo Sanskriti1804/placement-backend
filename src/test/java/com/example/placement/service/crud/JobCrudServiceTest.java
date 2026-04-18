@@ -1,23 +1,29 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.placement.JobCreateRequest;
+import com.example.placement.dto.job.JobCreateRequest;
 import com.example.placement.entity.main.CompanyProfile;
-import com.example.placement.entity.types.JobType;
-import com.example.placement.entity.WorkMode;
+import com.example.placement.entity.main.StaffProfile;
+import com.example.placement.common.enums.JobType;
+import com.example.placement.common.enums.WorkMode;
 import com.example.placement.repository.CompanyRepo;
 import com.example.placement.repository.JobRepo;
-import com.example.placement.repository.JobSelectionRoundRepo;
-import com.example.placement.repository.PlacementCoordinatorRepo;
+import com.example.placement.repository.SelectionRoundRepo;
+import com.example.placement.repository.StaffProfileRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class JobCrudServiceTest {
 
     @Mock
@@ -25,9 +31,9 @@ class JobCrudServiceTest {
     @Mock
     private CompanyRepo companyRepo;
     @Mock
-    private PlacementCoordinatorRepo coordinatorRepo;
+    private StaffProfileRepo staffProfileRepo;
     @Mock
-    private JobSelectionRoundRepo jobSelectionRoundRepo;
+    private SelectionRoundRepo selectionRoundRepo;
 
     @InjectMocks
     private JobCrudService jobCrudService;
@@ -43,11 +49,11 @@ class JobCrudServiceTest {
 
     @BeforeEach
     void stubLookups() {
-        org.mockito.Mockito.when(companyRepo.findById(1L))
+        when(companyRepo.findById(1L))
                 .thenReturn(java.util.Optional.of(new CompanyProfile()));
-        org.mockito.Mockito.when(coordinatorRepo.findById(1L))
-                .thenReturn(java.util.Optional.of(new com.example.placement.entity.PlacementCoordinator()));
-        org.mockito.Mockito.when(jobRepo.save(org.mockito.Mockito.any()))
+        when(staffProfileRepo.findById(1L))
+                .thenReturn(java.util.Optional.of(new StaffProfile()));
+        when(jobRepo.save(any()))
                 .thenAnswer(inv -> inv.getArgument(0));
     }
 

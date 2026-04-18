@@ -1,6 +1,6 @@
 package com.example.placement.controller.api;
 
-import com.example.placement.dto.SkillRequest;
+import com.example.placement.dto.student.SkillRequest;
 import com.example.placement.entity.Skill;
 import com.example.placement.service.crud.SkillCrudService;
 import org.springframework.http.HttpStatus;

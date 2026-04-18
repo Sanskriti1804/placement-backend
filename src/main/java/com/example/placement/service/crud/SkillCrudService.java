@@ -1,6 +1,6 @@
 package com.example.placement.service.crud;
 
-import com.example.placement.dto.SkillRequest;
+import com.example.placement.dto.student.SkillRequest;
 import com.example.placement.entity.Skill;
 import com.example.placement.entity.main.StudentProfile;
 import com.example.placement.repository.SkillsRepo;

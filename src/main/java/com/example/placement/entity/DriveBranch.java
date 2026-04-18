@@ -1,7 +1,7 @@
 package com.example.placement.entity;
 
 import com.example.placement.entity.main.DriveProfile;
-import com.example.placement.entity.types.BranchType;
+import com.example.placement.common.enums.BranchType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

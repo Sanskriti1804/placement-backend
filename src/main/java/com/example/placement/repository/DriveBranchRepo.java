@@ -1,6 +1,6 @@
 package com.example.placement.repository;
 
-import com.example.placement.entity.types.BranchType;
+import com.example.placement.common.enums.BranchType;
 import com.example.placement.entity.DriveBranch;
 import org.springframework.data.jpa.repository.JpaRepository;
 
