@@ -1,5 +1,7 @@
 package com.example.placement.dto.placement;
 
+import com.example.placement.entity.RoundCompletionStatus;
+
 import java.time.LocalDateTime;
 
 public class JobSelectionRoundUpdateRequest {
@@ -8,6 +10,7 @@ public class JobSelectionRoundUpdateRequest {
     private String roundName;
     private Integer sequenceOrder;
     private LocalDateTime scheduledDate;
+    private RoundCompletionStatus completionStatus;
 
     public Long getId() {
         return id;
@@ -39,5 +42,13 @@ public class JobSelectionRoundUpdateRequest {
 
     public void setScheduledDate(LocalDateTime scheduledDate) {
         this.scheduledDate = scheduledDate;
+    }
+
+    public RoundCompletionStatus getCompletionStatus() {
+        return completionStatus;
+    }
+
+    public void setCompletionStatus(RoundCompletionStatus completionStatus) {
+        this.completionStatus = completionStatus;
     }
 }

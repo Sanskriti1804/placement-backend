@@ -1,5 +1,7 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.types.JobResultStatus;
+import com.example.placement.entity.types.JobType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -50,6 +52,9 @@ public class Job {
 
     @Column(name = "last_date_to_apply")
     private LocalDate lastDateToApply;
+
+    @Column(name = "job_posting_time")
+    private LocalDateTime jobPostingTime;
 
     @Column(length = 512)
     private String venue;
@@ -166,6 +171,14 @@ public class Job {
 
     public void setLastDateToApply(LocalDate lastDateToApply) {
         this.lastDateToApply = lastDateToApply;
+    }
+
+    public LocalDateTime getJobPostingTime() {
+        return jobPostingTime;
+    }
+
+    public void setJobPostingTime(LocalDateTime jobPostingTime) {
+        this.jobPostingTime = jobPostingTime;
     }
 
     public String getVenue() {

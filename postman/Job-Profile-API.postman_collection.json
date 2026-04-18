@@ -1,0 +1,169 @@
+{
+  "info": {
+    "name": "Placement — Job Profile & Selection Rounds",
+    "description": "Base URL defaults to http://localhost:8081. All routes except /api/auth/** require JWT: set collection variable `token` after login, or paste Bearer token in Authorization.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081" },
+    { "key": "token", "value": "" },
+    { "key": "companyId", "value": "1" },
+    { "key": "placementCoordinatorId", "value": "1" },
+    { "key": "jobId", "value": "" },
+    { "key": "roundId", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth — Login (set token manually from response)",
+      "request": {
+        "auth": { "type": "noauth" },
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"your-user@example.com\",\n  \"password\": \"your-password\"\n}"
+        },
+        "url": "{{baseUrl}}/api/auth/login",
+        "description": "Expected 200 with JWT in body (field name depends on AuthController). Copy token into collection variable `token`."
+      }
+    },
+    {
+      "name": "Job — Create (full-time)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"companyId\": {{companyId}},\n  \"placementCoordinatorId\": {{placementCoordinatorId}},\n  \"jobType\": \"FULL_TIME\",\n  \"workMode\": \"HYBRID\",\n  \"ctcLpa\": 12.5,\n  \"lastDateToApply\": \"2026-05-30\",\n  \"jobPostingTime\": \"2026-04-18T10:00:00\",\n  \"venue\": \"Main campus — Placement hall\",\n  \"jobDescription\": \"Long description text.\",\n  \"responsibilities\": \"Bullet-style responsibilities.\",\n  \"requirements\": \"Skills and experience.\",\n  \"eligibility\": \"CGPA, batch, branch rules.\",\n  \"selectionRounds\": [\n    {\n      \"roundName\": \"Online assessment\",\n      \"sequenceOrder\": 1,\n      \"scheduledDate\": \"2026-06-01T09:00:00\",\n      \"completionStatus\": \"PENDING\"\n    },\n    {\n      \"roundName\": \"Technical interview\",\n      \"sequenceOrder\": 2,\n      \"scheduledDate\": \"2026-06-02T14:00:00\"\n    }\n  ]\n}"
+        },
+        "url": "{{baseUrl}}/api/jobs",
+        "description": "Expected 201 Created. Body includes `id`, `companyId`, `placementCoordinatorId`, enums as strings, nested `selectionRounds` sorted by `sequenceOrder`. Save `id` as `jobId`."
+      }
+    },
+    {
+      "name": "Job — Create (internship — duration required)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"companyId\": {{companyId}},\n  \"placementCoordinatorId\": {{placementCoordinatorId}},\n  \"jobType\": \"INTERNSHIP\",\n  \"internshipDuration\": \"6 months\",\n  \"workMode\": \"REMOTE\",\n  \"ctcLpa\": 25000,\n  \"venue\": \"Remote\",\n  \"jobDescription\": \"Summer internship.\",\n  \"responsibilities\": \"...\",\n  \"requirements\": \"...\",\n  \"eligibility\": \"...\"\n}"
+        },
+        "url": "{{baseUrl}}/api/jobs",
+        "description": "Omitting `internshipDuration` with INTERNSHIP returns 400 with error message."
+      }
+    },
+    {
+      "name": "Job — Create (bad — internship without duration)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"companyId\": {{companyId}},\n  \"placementCoordinatorId\": {{placementCoordinatorId}},\n  \"jobType\": \"INTERNSHIP\",\n  \"workMode\": \"ON_SITE\",\n  \"jobDescription\": \"x\",\n  \"responsibilities\": \"x\",\n  \"requirements\": \"x\",\n  \"eligibility\": \"x\"\n}"
+        },
+        "url": "{{baseUrl}}/api/jobs",
+        "description": "Expected 400: internshipDuration is required when jobType is INTERNSHIP."
+      }
+    },
+    {
+      "name": "Job — List all",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/jobs",
+        "description": "Expected 200 array of JobResponse."
+      }
+    },
+    {
+      "name": "Job — Get by ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/jobs/{{jobId}}",
+        "description": "Expected 200 or 404 if jobId empty/invalid."
+      }
+    },
+    {
+      "name": "Job — Update",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"jobType\": \"PART_TIME\",\n  \"workMode\": \"ON_SITE\",\n  \"venue\": \"Updated venue\",\n  \"jobPostingTime\": \"2026-04-19T11:30:00\"\n}"
+        },
+        "url": "{{baseUrl}}/api/jobs/{{jobId}}",
+        "description": "Expected 200. Changing away from INTERNSHIP clears internship duration server-side."
+      }
+    },
+    {
+      "name": "Job — List selection rounds for job",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/jobs/{{jobId}}/selection-rounds",
+        "description": "Expected 200: array ordered by sequenceOrder with jobId and completionStatus. 404 if job missing."
+      }
+    },
+    {
+      "name": "Job — Delete",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/jobs/{{jobId}}",
+        "description": "Expected 204 No Content."
+      }
+    },
+    {
+      "name": "Round — Create (query jobId)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roundName\": \"HR round\",\n  \"sequenceOrder\": 3,\n  \"scheduledDate\": \"2026-06-05T10:00:00\",\n  \"completionStatus\": \"PENDING\"\n}"
+        },
+        "url": "{{baseUrl}}/api/job-selection-rounds?jobId={{jobId}}",
+        "description": "Expected 201. Unique (jobId, sequenceOrder) — duplicate order returns 409."
+      }
+    },
+    {
+      "name": "Round — Get by ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/job-selection-rounds/{{roundId}}",
+        "description": "Expected 200 JobSelectionRoundResponse with jobId."
+      }
+    },
+    {
+      "name": "Round — List all (global)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/job-selection-rounds",
+        "description": "Expected 200 — all rounds in DB."
+      }
+    },
+    {
+      "name": "Round — Update status",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"completionStatus\": \"COMPLETED\"\n}"
+        },
+        "url": "{{baseUrl}}/api/job-selection-rounds/{{roundId}}",
+        "description": "Expected 200."
+      }
+    },
+    {
+      "name": "Round — Delete",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/job-selection-rounds/{{roundId}}",
+        "description": "Expected 204."
+      }
+    }
+  ]
+}

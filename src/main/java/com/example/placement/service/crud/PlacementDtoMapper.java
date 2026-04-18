@@ -3,8 +3,11 @@ package com.example.placement.service.crud;
 import com.example.placement.dto.RoleResponse;
 import com.example.placement.dto.placement.*;
 import com.example.placement.entity.*;
+import com.example.placement.entity.types.JobResultStatus;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public final class PlacementDtoMapper {
@@ -48,9 +51,11 @@ public final class PlacementDtoMapper {
     public static JobSelectionRoundResponse toRoundResponse(JobSelectionRound e) {
         JobSelectionRoundResponse r = new JobSelectionRoundResponse();
         r.setId(e.getId());
+        r.setJobId(e.getJob() != null ? e.getJob().getId() : null);
         r.setRoundName(e.getRoundName());
         r.setSequenceOrder(e.getSequenceOrder());
         r.setScheduledDate(e.getScheduledDate());
+        r.setCompletionStatus(e.getCompletionStatus());
         return r;
     }
 
@@ -65,6 +70,7 @@ public final class PlacementDtoMapper {
         r.setCtcLpa(e.getCtcLpa());
         r.setAdditionalInfo(e.getAdditionalInfo());
         r.setLastDateToApply(e.getLastDateToApply());
+        r.setJobPostingTime(e.getJobPostingTime());
         r.setVenue(e.getVenue());
         r.setJobDescription(e.getJobDescription());
         r.setPreparationGuide(e.getPreparationGuide());
@@ -77,9 +83,9 @@ public final class PlacementDtoMapper {
         r.setUpdatedAt(e.getUpdatedAt());
         List<JobSelectionRoundResponse> rounds = new ArrayList<>();
         if (e.getSelectionRounds() != null) {
-            for (JobSelectionRound sr : e.getSelectionRounds()) {
-                rounds.add(toRoundResponse(sr));
-            }
+            e.getSelectionRounds().stream()
+                    .sorted(Comparator.comparing(JobSelectionRound::getSequenceOrder, Comparator.nullsLast(Integer::compareTo)))
+                    .forEach(sr -> rounds.add(toRoundResponse(sr)));
         }
         r.setSelectionRounds(rounds);
         return r;
@@ -99,29 +105,59 @@ public final class PlacementDtoMapper {
         return r;
     }
 
+    public static DriveSelectionRoundResponse toDriveSelectionRoundResponse(DriveSelectionRound e) {
+        DriveSelectionRoundResponse r = new DriveSelectionRoundResponse();
+        r.setId(e.getId());
+        r.setDriveId(e.getDrive() != null ? e.getDrive().getId() : null);
+        r.setRoundName(e.getRoundName());
+        r.setSequenceOrder(e.getSequenceOrder());
+        r.setScheduledDate(e.getScheduledDate());
+        r.setCompletionStatus(e.getCompletionStatus());
+        return r;
+    }
+
+    private static String driveResultDisplay(JobResultStatus status, LocalDate resultDate) {
+        if (status == JobResultStatus.NOT_ANNOUNCED) {
+            return "Not Announced";
+        }
+        return resultDate != null ? resultDate.toString() : "";
+    }
+
     public static DriveResponse toDriveResponse(Drive e) {
         DriveResponse r = new DriveResponse();
         r.setId(e.getId());
         r.setDriveName(e.getDriveName());
         r.setCompanyId(e.getCompany() != null ? e.getCompany().getId() : null);
         r.setRegistrationDeadline(e.getRegistrationDeadline());
+        r.setDriveDateTime(e.getDriveDateTime());
+        r.setVenue(e.getVenue());
+        r.setResultStatus(e.getResultStatus());
+        r.setResultDate(e.getResultDate());
+        r.setResultDisplay(driveResultDisplay(e.getResultStatus(), e.getResultDate()));
         r.setPlacementCoordinatorId(e.getPlacementCoordinator() != null ? e.getPlacementCoordinator().getId() : null);
         r.setCreatedAt(e.getCreatedAt());
         r.setUpdatedAt(e.getUpdatedAt());
         List<DriveBranchResponse> br = new ArrayList<>();
         if (e.getAllowedBranches() != null) {
-            for (DriveBranch b : e.getAllowedBranches()) {
-                br.add(toDriveBranchResponse(b));
-            }
+            e.getAllowedBranches().stream()
+                    .sorted(Comparator.comparing(b -> b.getBranch().name()))
+                    .forEach(b -> br.add(toDriveBranchResponse(b)));
         }
         r.setAllowedBranches(br);
         List<DriveOfferedRoleResponse> or = new ArrayList<>();
         if (e.getOfferedRoles() != null) {
-            for (DriveOfferedRole o : e.getOfferedRoles()) {
-                or.add(toDriveOfferedRoleResponse(o));
-            }
+            e.getOfferedRoles().stream()
+                    .sorted(Comparator.comparing(DriveOfferedRole::getId, Comparator.nullsLast(Long::compareTo)))
+                    .forEach(o -> or.add(toDriveOfferedRoleResponse(o)));
         }
         r.setOfferedRoles(or);
+        List<DriveSelectionRoundResponse> rounds = new ArrayList<>();
+        if (e.getSelectionRounds() != null) {
+            e.getSelectionRounds().stream()
+                    .sorted(Comparator.comparing(DriveSelectionRound::getSequenceOrder, Comparator.nullsLast(Integer::compareTo)))
+                    .forEach(sr -> rounds.add(toDriveSelectionRoundResponse(sr)));
+        }
+        r.setSelectionRounds(rounds);
         return r;
     }
 

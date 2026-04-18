@@ -1,8 +1,8 @@
 package com.example.placement.dto;
 
-import com.example.placement.entity.BranchType;
-import com.example.placement.entity.CourseType;
-import com.example.placement.entity.DomainType;
+import com.example.placement.entity.types.BranchType;
+import com.example.placement.entity.types.CourseType;
+import com.example.placement.entity.types.DomainType;
 
 import java.math.BigDecimal;
 import java.util.List;

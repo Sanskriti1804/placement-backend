@@ -2,6 +2,7 @@ package com.example.placement.controller.api;
 
 import com.example.placement.dto.placement.JobCreateRequest;
 import com.example.placement.dto.placement.JobResponse;
+import com.example.placement.dto.placement.JobSelectionRoundResponse;
 import com.example.placement.dto.placement.JobUpdateRequest;
 import com.example.placement.service.crud.JobCrudService;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,11 @@ public class JobCrudController {
     @GetMapping
     public List<JobResponse> list() {
         return jobCrudService.findAll();
+    }
+
+    @GetMapping("/{jobId}/selection-rounds")
+    public List<JobSelectionRoundResponse> listSelectionRounds(@PathVariable Long jobId) {
+        return jobCrudService.listSelectionRoundsForJob(jobId);
     }
 
     @PutMapping("/{id}")

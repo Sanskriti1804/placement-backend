@@ -2,6 +2,7 @@ package com.example.placement.controller.api;
 
 import com.example.placement.dto.placement.DriveCreateRequest;
 import com.example.placement.dto.placement.DriveResponse;
+import com.example.placement.dto.placement.DriveSelectionRoundResponse;
 import com.example.placement.dto.placement.DriveUpdateRequest;
 import com.example.placement.service.crud.DriveCrudService;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,11 @@ public class DriveCrudController {
     @GetMapping
     public List<DriveResponse> list() {
         return driveCrudService.findAll();
+    }
+
+    @GetMapping("/{driveId}/selection-rounds")
+    public List<DriveSelectionRoundResponse> listSelectionRounds(@PathVariable Long driveId) {
+        return driveCrudService.listSelectionRoundsForDrive(driveId);
     }
 
     @PutMapping("/{id}")

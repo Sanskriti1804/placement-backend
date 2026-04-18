@@ -1,6 +1,6 @@
 package com.example.placement.dto;
 
-import com.example.placement.entity.PlatformType;
+import com.example.placement.entity.types.PlatformType;
 
 public class PlatformLinkRequest {
     private PlatformType type;

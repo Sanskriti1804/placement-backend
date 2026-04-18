@@ -1,7 +1,7 @@
 package com.example.placement.repository;
 
 import com.example.placement.entity.Platform;
-import com.example.placement.entity.PlatformType;
+import com.example.placement.entity.types.PlatformType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

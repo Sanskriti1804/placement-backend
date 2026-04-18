@@ -1,4 +1,4 @@
-package com.example.placement.entity;
+package com.example.placement.entity.types;
 
 public enum PlatformType {
     GITHUB,

@@ -1,13 +1,13 @@
 package com.example.placement.service.crud;
 
+import com.example.placement.dto.placement.DriveSelectionRoundResponse;
 import com.example.placement.dto.placement.JobSelectionRoundCreateRequest;
-import com.example.placement.dto.placement.JobSelectionRoundResponse;
 import com.example.placement.dto.placement.JobSelectionRoundUpdateRequest;
-import com.example.placement.entity.Job;
-import com.example.placement.entity.JobSelectionRound;
+import com.example.placement.entity.Drive;
+import com.example.placement.entity.DriveSelectionRound;
 import com.example.placement.entity.RoundCompletionStatus;
-import com.example.placement.repository.JobRepo;
-import com.example.placement.repository.JobSelectionRoundRepo;
+import com.example.placement.repository.DriveRepo;
+import com.example.placement.repository.DriveSelectionRoundRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,38 +16,38 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-public class JobSelectionRoundCrudService {
+public class DriveSelectionRoundCrudService {
 
-    private final JobSelectionRoundRepo roundRepo;
-    private final JobRepo jobRepo;
+    private final DriveSelectionRoundRepo roundRepo;
+    private final DriveRepo driveRepo;
 
-    public JobSelectionRoundCrudService(JobSelectionRoundRepo roundRepo, JobRepo jobRepo) {
+    public DriveSelectionRoundCrudService(DriveSelectionRoundRepo roundRepo, DriveRepo driveRepo) {
         this.roundRepo = roundRepo;
-        this.jobRepo = jobRepo;
+        this.driveRepo = driveRepo;
     }
 
     @Transactional
-    public JobSelectionRoundResponse create(Long jobId, JobSelectionRoundCreateRequest req) {
-        if (jobId == null) {
-            throw new IllegalArgumentException("jobId is required");
+    public DriveSelectionRoundResponse create(Long driveId, JobSelectionRoundCreateRequest req) {
+        if (driveId == null) {
+            throw new IllegalArgumentException("driveId is required");
         }
         if (req.getRoundName() == null || req.getRoundName().isBlank() || req.getSequenceOrder() == null) {
             throw new IllegalArgumentException("roundName and sequenceOrder are required");
         }
-        Job job = jobRepo.findById(jobId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
-        JobSelectionRound e = new JobSelectionRound();
-        e.setJob(job);
+        Drive drive = driveRepo.findById(driveId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
+        DriveSelectionRound e = new DriveSelectionRound();
+        e.setDrive(drive);
         e.setRoundName(req.getRoundName().trim());
         e.setSequenceOrder(req.getSequenceOrder());
         e.setScheduledDate(req.getScheduledDate());
         e.setCompletionStatus(req.getCompletionStatus() != null ? req.getCompletionStatus() : RoundCompletionStatus.PENDING);
-        return PlacementDtoMapper.toRoundResponse(roundRepo.save(e));
+        return PlacementDtoMapper.toDriveSelectionRoundResponse(roundRepo.save(e));
     }
 
     @Transactional
-    public JobSelectionRoundResponse update(Long id, JobSelectionRoundUpdateRequest req) {
-        JobSelectionRound e = roundRepo.findById(id)
+    public DriveSelectionRoundResponse update(Long id, JobSelectionRoundUpdateRequest req) {
+        DriveSelectionRound e = roundRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Round not found"));
         if (req.getRoundName() != null && !req.getRoundName().isBlank()) {
             e.setRoundName(req.getRoundName().trim());
@@ -61,18 +61,18 @@ public class JobSelectionRoundCrudService {
         if (req.getCompletionStatus() != null) {
             e.setCompletionStatus(req.getCompletionStatus());
         }
-        return PlacementDtoMapper.toRoundResponse(roundRepo.save(e));
+        return PlacementDtoMapper.toDriveSelectionRoundResponse(roundRepo.save(e));
     }
 
     @Transactional(readOnly = true)
-    public JobSelectionRoundResponse get(Long id) {
-        return roundRepo.findById(id).map(PlacementDtoMapper::toRoundResponse)
+    public DriveSelectionRoundResponse get(Long id) {
+        return roundRepo.findById(id).map(PlacementDtoMapper::toDriveSelectionRoundResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Round not found"));
     }
 
     @Transactional(readOnly = true)
-    public List<JobSelectionRoundResponse> findAll() {
-        return roundRepo.findAll().stream().map(PlacementDtoMapper::toRoundResponse).toList();
+    public List<DriveSelectionRoundResponse> findAll() {
+        return roundRepo.findAll().stream().map(PlacementDtoMapper::toDriveSelectionRoundResponse).toList();
     }
 
     @Transactional

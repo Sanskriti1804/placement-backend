@@ -7,26 +7,26 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "job_selection_rounds",
+        name = "drive_selection_rounds",
         uniqueConstraints = @UniqueConstraint(
-                name = "uk_job_round_sequence",
-                columnNames = {"job_id", "sequence_order"}
+                name = "uk_drive_round_sequence",
+                columnNames = {"drive_id", "sequence_order"}
         ),
         indexes = {
-                @Index(name = "idx_jsr_job_id", columnList = "job_id"),
-                @Index(name = "idx_jsr_scheduled", columnList = "scheduled_date")
+                @Index(name = "idx_dsr_drive_id", columnList = "drive_id"),
+                @Index(name = "idx_dsr_scheduled", columnList = "scheduled_date")
         }
 )
-public class JobSelectionRound {
+public class DriveSelectionRound {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_id", nullable = false)
+    @JoinColumn(name = "drive_id", nullable = false)
     @JsonIgnore
-    private Job job;
+    private Drive drive;
 
     @Column(name = "round_name", nullable = false, length = 255)
     private String roundName;
@@ -49,12 +49,12 @@ public class JobSelectionRound {
         this.id = id;
     }
 
-    public Job getJob() {
-        return job;
+    public Drive getDrive() {
+        return drive;
     }
 
-    public void setJob(Job job) {
-        this.job = job;
+    public void setDrive(Drive drive) {
+        this.drive = drive;
     }
 
     public String getRoundName() {

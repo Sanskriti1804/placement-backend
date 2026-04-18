@@ -2,9 +2,9 @@ package com.example.placement.service;
 
 import com.example.placement.config.EducationMapping;
 import com.example.placement.entity.Backlog;
-import com.example.placement.entity.BranchType;
-import com.example.placement.entity.CourseType;
-import com.example.placement.entity.DomainType;
+import com.example.placement.entity.types.BranchType;
+import com.example.placement.entity.types.CourseType;
+import com.example.placement.entity.types.DomainType;
 import com.example.placement.entity.EducationProfile;
 import com.example.placement.entity.StudentProfile;
 import com.example.placement.repository.BackLogRepo;
@@ -14,12 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class EducationalProfileService {

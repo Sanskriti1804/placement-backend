@@ -1,8 +1,10 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.types.JobResultStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,19 @@ public class Drive {
     @Column(name = "registration_deadline", nullable = false)
     private LocalDateTime registrationDeadline;
 
+    @Column(name = "drive_date_time")
+    private LocalDateTime driveDateTime;
+
+    @Column(length = 512)
+    private String venue;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "result_status", nullable = false, length = 32)
+    private JobResultStatus resultStatus = JobResultStatus.NOT_ANNOUNCED;
+
+    @Column(name = "result_date")
+    private LocalDate resultDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "placement_coordinator_id")
     @JsonIgnore
@@ -49,6 +64,9 @@ public class Drive {
 
     @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DriveOfferedRole> offeredRoles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DriveSelectionRound> selectionRounds = new ArrayList<>();
 
     @PrePersist
     void onCreate() {
@@ -96,6 +114,38 @@ public class Drive {
         this.registrationDeadline = registrationDeadline;
     }
 
+    public LocalDateTime getDriveDateTime() {
+        return driveDateTime;
+    }
+
+    public void setDriveDateTime(LocalDateTime driveDateTime) {
+        this.driveDateTime = driveDateTime;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public JobResultStatus getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(JobResultStatus resultStatus) {
+        this.resultStatus = resultStatus;
+    }
+
+    public LocalDate getResultDate() {
+        return resultDate;
+    }
+
+    public void setResultDate(LocalDate resultDate) {
+        this.resultDate = resultDate;
+    }
+
     public PlacementCoordinator getPlacementCoordinator() {
         return placementCoordinator;
     }
@@ -134,5 +184,13 @@ public class Drive {
 
     public void setOfferedRoles(List<DriveOfferedRole> offeredRoles) {
         this.offeredRoles = offeredRoles;
+    }
+
+    public List<DriveSelectionRound> getSelectionRounds() {
+        return selectionRounds;
+    }
+
+    public void setSelectionRounds(List<DriveSelectionRound> selectionRounds) {
+        this.selectionRounds = selectionRounds;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.placement.entity;
+package com.example.placement.entity.types;
 
 public enum BranchType {
     ENGINEERING_TECHNOLOGY,       // Computer, Electronics, Civil, AI, IT, etc.

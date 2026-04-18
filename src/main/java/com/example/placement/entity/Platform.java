@@ -1,5 +1,6 @@
 package com.example.placement.entity;
 
+import com.example.placement.entity.types.PlatformType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

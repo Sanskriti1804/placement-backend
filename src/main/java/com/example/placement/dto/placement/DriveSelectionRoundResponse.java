@@ -4,10 +4,10 @@ import com.example.placement.entity.RoundCompletionStatus;
 
 import java.time.LocalDateTime;
 
-public class JobSelectionRoundResponse {
+public class DriveSelectionRoundResponse {
 
     private Long id;
-    private Long jobId;
+    private Long driveId;
     private String roundName;
     private Integer sequenceOrder;
     private LocalDateTime scheduledDate;
@@ -21,12 +21,12 @@ public class JobSelectionRoundResponse {
         this.id = id;
     }
 
-    public Long getJobId() {
-        return jobId;
+    public Long getDriveId() {
+        return driveId;
     }
 
-    public void setJobId(Long jobId) {
-        this.jobId = jobId;
+    public void setDriveId(Long driveId) {
+        this.driveId = driveId;
     }
 
     public String getRoundName() {

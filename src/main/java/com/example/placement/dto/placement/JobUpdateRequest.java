@@ -1,11 +1,12 @@
 package com.example.placement.dto.placement;
 
-import com.example.placement.entity.JobResultStatus;
-import com.example.placement.entity.JobType;
+import com.example.placement.entity.types.JobResultStatus;
+import com.example.placement.entity.types.JobType;
 import com.example.placement.entity.WorkMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class JobUpdateRequest {
     private BigDecimal ctcLpa;
     private String additionalInfo;
     private LocalDate lastDateToApply;
+    private LocalDateTime jobPostingTime;
     private String venue;
     private String jobDescription;
     private String preparationGuide;
@@ -91,6 +93,14 @@ public class JobUpdateRequest {
 
     public void setLastDateToApply(LocalDate lastDateToApply) {
         this.lastDateToApply = lastDateToApply;
+    }
+
+    public LocalDateTime getJobPostingTime() {
+        return jobPostingTime;
+    }
+
+    public void setJobPostingTime(LocalDateTime jobPostingTime) {
+        this.jobPostingTime = jobPostingTime;
     }
 
     public String getVenue() {

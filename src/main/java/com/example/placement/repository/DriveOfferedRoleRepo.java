@@ -8,4 +8,6 @@ import java.util.List;
 public interface DriveOfferedRoleRepo extends JpaRepository<DriveOfferedRole, Long> {
 
     List<DriveOfferedRole> findByDrive_Id(Long driveId);
+
+    long countByDrive_Id(Long driveId);
 }

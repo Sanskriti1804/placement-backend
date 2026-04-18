@@ -17,6 +17,8 @@ import java.util.List;
 @Service
 public class DriveOfferedRoleCrudService {
 
+    private static final int MAX_ROLES_PER_DRIVE = 4;
+
     private final DriveOfferedRoleRepo repo;
     private final DriveRepo driveRepo;
 
@@ -32,6 +34,9 @@ public class DriveOfferedRoleCrudService {
         }
         Drive drive = driveRepo.findById(req.getDriveId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Drive not found"));
+        if (repo.countByDrive_Id(drive.getId()) >= MAX_ROLES_PER_DRIVE) {
+            throw new IllegalArgumentException("A drive may have at most " + MAX_ROLES_PER_DRIVE + " offered roles");
+        }
         DriveOfferedRole e = new DriveOfferedRole();
         e.setDrive(drive);
         e.setRoleTitle(req.getRoleTitle().trim());

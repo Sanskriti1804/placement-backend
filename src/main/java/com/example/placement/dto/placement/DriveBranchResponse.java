@@ -1,6 +1,6 @@
 package com.example.placement.dto.placement;
 
-import com.example.placement.entity.BranchType;
+import com.example.placement.entity.types.BranchType;
 
 public class DriveBranchResponse {
 
