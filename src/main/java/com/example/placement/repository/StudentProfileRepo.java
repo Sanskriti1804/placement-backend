@@ -8,5 +8,5 @@ import java.util.Optional;
 //<Entity, IDType> → always provide so repo knows what entity & ID type to manage.
 public interface StudentProfileRepo extends JpaRepository<StudentProfile, Long> {
     //Optional -  returns optional instead of null if user doesnt exist
-    Optional<StudentProfile> findByUserId(Long userId);
+    Optional<StudentProfile> findByUser_Id(Long userId);
 }

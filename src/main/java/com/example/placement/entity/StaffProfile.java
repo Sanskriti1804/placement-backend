@@ -48,7 +48,7 @@ public class StaffProfile {
     @Column(name = "placement_duty", columnDefinition = "TEXT")
     private String placementDuty;
 
-    @Column(name = "current_role", length = 255)
+    @Column(name = "staff_current_role", length = 255)
     private String currentRole;
 
     @Column(name = "placement_responsibilities", columnDefinition = "TEXT")
